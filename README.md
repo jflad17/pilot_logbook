@@ -3,6 +3,7 @@
  docker.yml file
 
  Common commands you might have to use:
+ 
  alembic revision --autogenerate -m "Description" -- Used to compare local model changes with database
  alembic upgrade head -- Used to push model changes to database
  alembic history
