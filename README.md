@@ -1,4 +1,4 @@
-#pilot_logbook
+# Pilot Logbook
 
 Logbook to track pilot flying miles using FastAPI, SQLAlchemy, Alembic for backend and React for the frontend. I will be creating this using Docker files to be able to run everything just by running the 
 docker.yml file
