@@ -1,0 +1,8 @@
+{
+  "[python]": {
+      "editor.defaultFormatter": null,
+  },
+  "python.formatting.provider": "black",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "HookyQR.beautify"
+}
