@@ -36,7 +36,7 @@ logging.getLogger("uvicorn").handlers = [InterceptHandler()]
 
 logger.configure(handlers=[{"sink": sys.stdout, "level": logging.DEBUG, "format": format_record}])
 if settings.SERVER == True:
-    logger.add(settings.SHARED_ROOT + "/logs/odyssey_api/odyssey_api.log", rotation="1 day")
+    logger.add(settings.PROJECT_ROOT + "/logs/api.log", rotation="1 day")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=9000)
