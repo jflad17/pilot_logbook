@@ -38,5 +38,5 @@ logger.configure(handlers=[{"sink": sys.stdout, "level": logging.DEBUG, "format"
 if settings.SERVER == True:
     logger.add(settings.PROJECT_ROOT + "/logs/api.log", rotation="1 day")
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=9000)
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="0.0.0.0", port=9000)

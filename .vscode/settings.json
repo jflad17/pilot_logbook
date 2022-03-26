@@ -4,5 +4,8 @@
   },
   "python.formatting.provider": "black",
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "HookyQR.beautify"
+  "editor.defaultFormatter": "HookyQR.beautify",
+  "[jsonc]": {
+    "editor.defaultFormatter": "SimonSiefke.prettier-vscode"
+  }
 }
