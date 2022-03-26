@@ -22,11 +22,13 @@ router = CRUDRouter(
 
 
 @router.post("/import", response_model=schemas.Flight)
-def skywest_import_flight(file: UploadFile = File(...), db: Session = Depends(get_db)):
+def skywest_import_flight(
+    airline: str, name: str, file: UploadFile = File(...), db: Session = Depends(get_db)
+):
     csv_reader = pd.read_csv(file.file)
     airline_identifier_id = db.execute(
         select(models.AirlineIdentifier.idAirlineIdentifier).where(
-            models.AirlineIdentifier.name == "SkyWest Airlines"
+            models.AirlineIdentifier.name == airline
         )
     ).scalar_one()
     captain_id = db.execute(
@@ -50,7 +52,7 @@ def skywest_import_flight(file: UploadFile = File(...), db: Session = Depends(ge
         first_officer = row["First Officer"]
         crewMemberName = captain
         pilot_type_id = captain_id
-        if "Kristen Landwehr" in captain:
+        if name in captain:
             crewMemberName = first_officer
             pilot_type_id = first_officer_id
         data_list.append(
