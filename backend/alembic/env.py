@@ -72,7 +72,7 @@ def run_migrations_online():
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            version_table="alembicversion",
+            version_table="AlembicVersion",
             compare_type=True,
         )
 
