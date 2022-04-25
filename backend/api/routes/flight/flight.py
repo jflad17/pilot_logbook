@@ -19,10 +19,10 @@ router = CRUDRouter(
     delete_all_route=False,
 )
 
-
-@router.post("/import", response_model=schemas.Flight)
+#  = list[File(...)]
+@router.post("/skywest-import/", response_model=schemas.Flight)
 def skywest_import_flight(
-    airline: str, name: str, files: list[UploadFile] = list[File(...)], db: Session = Depends(get_db)
+    airline: str, name: str, files: list[UploadFile], db: Session = Depends(get_db)
 ):
     for file in files:
         csv_reader = pd.read_csv(file.file)
