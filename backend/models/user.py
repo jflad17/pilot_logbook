@@ -5,6 +5,7 @@ from db.base import Base
 
 class User(Base):
     idUser = Column(Integer, primary_key=True)
+    admin = Column(Boolean, nullable=False, default=False)
     username = Column(String(100), nullable=False, unique=True)
     firstName = Column(String(100), nullable=False)
     lastName = Column(String(100), nullable=False)

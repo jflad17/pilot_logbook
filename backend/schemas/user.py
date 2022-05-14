@@ -3,6 +3,7 @@ from .base import Base
 
 class User(Base):
     idUser: int
+    admin: bool
     username: str
     firstName: str
     lastName: str
