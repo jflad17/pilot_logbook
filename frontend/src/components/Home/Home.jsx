@@ -1,7 +1,5 @@
 import React from 'react';
 
-// import Page from '../Page/Page';
-
 /**
  * Home Page Component
  * @returns {JSX}
@@ -10,9 +8,7 @@ import React from 'react';
 const Home = () => {
   return (
     <>
-      {/* <Page>*/}
-      <h1>Welcome Home</h1>
-      {/* </Page>*/}
+      <center><h1>Welcome to Pilot Logbook!</h1></center>
     </>
   );
 };

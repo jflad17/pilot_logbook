@@ -1,0 +1,13 @@
+.login-form {
+  padding-top: 300px!important;
+  width: 350px!important;
+  max-width: 350px;
+  opacity: 75%;
+  
+}
+
+.login-bg {
+  background-color: white;
+  padding: 50px;
+  border-radius: 10px;
+}

@@ -7,6 +7,6 @@ engine = create_engine(
     future=True,
     pool_size=settings.SQLALCHEMY_POOLSIZE,
     max_overflow=5,
-    pool_recycle=3600,
+    # pool_recycle=3600,
 )
 session: Session = sessionmaker(autocommit=False, autoflush=False, bind=engine, future=True)

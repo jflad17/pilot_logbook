@@ -1,6 +1,7 @@
 import axios from 'axios';
 const setupAxios = () => {
-  axios.defaults.baseURL = 'http://localhost:9000';
+  // axios.defaults.baseURL = 'http://localhost:9000';
+  axios.defaults.baseURL = process.env.REACT_APP_API_URL;
   axios.defaults.headers.post['Content-Type'] = 'application/json';
 
   axios.defaults.paramsSerializer = (params) => {
@@ -14,9 +15,9 @@ const setupAxios = () => {
   axios.interceptors.request.use(
       (config) => {
         if (!config.headers.Authorization) {
-          const accessToken = localStorage.getItem('accessToken');
+          const accessToken = localStorage.getItem('token');
           if (accessToken !== null) {
-            config.headers.Authorization = `Bearer ${JSON.parse(accessToken)}`;
+            config.headers.Authorization = `Bearer ${accessToken}`;
           }
         }
         return config;

@@ -24,6 +24,7 @@ router = CRUDRouter(
 def skywest_import_flight(
     airline: str, name: str, files: list[UploadFile], db: Session = Depends(get_db)
 ):
+    message_list = []
     for file in files:
         csv_reader = pd.read_csv(file.file)
         airline_identifier_id = db.execute(
@@ -76,7 +77,10 @@ def skywest_import_flight(
         try:
             db.execute(insert(models.Flight).values(data_list))
             db.commit()
+            message_list.append(file.filename + " Uploaded Successfully!")
         except Exception as err:
             print(err)
             db.rollback()
+            message_list.append(file.filename + " Failed Uploading!")
             raise HTTPException(422, err)
+    return message_list

@@ -1,35 +1,87 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+// import { Navbar, Nav, Container } from 'react-bootstrap';
+
 import Logo from '../../images/logo.png';
+import Logout from './Logout';
+// import { RequireToken } from '../../Auth';
+
+import {
+  AppBar,
+  Toolbar,
+  CssBaseline,
+  Typography,
+  useTheme,
+  useMediaQuery,
+  makeStyles,
+} from '@material-ui/core';
+import Drawer from './Drawer';
+
+const useStyles = makeStyles((theme) => ({
+  navlinks: {
+    marginLeft: theme.spacing(5),
+    display: 'flex',
+  },
+  logo: {
+    flexGrow: '2',
+    cursor: 'pointer',
+  },
+  link: {
+    'textDecoration': 'none',
+    'color': 'white',
+    'fontSize': '20px',
+    'marginRight': theme.spacing(20),
+    '&:hover': {
+      color: 'lightblue',
+      borderBottom: '1px solid white',
+    },
+  },
+}));
 
 /**
  *
  * @return {Component} Navbar Component
  */
-function TopNav() {
+function Navbar() {
+  const classes = useStyles();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
   return (
     <>
-      <Navbar bg="dark" variant="dark">
-        <Container>
-          <Navbar.Brand to="/">
-            <img width="35px" height="35px" className="d-inline-block align-top img-responsive" src={Logo} alt="logo"/>
+      <AppBar position="static" style={{ backgroundColor: 'dimgray' }}>
+        <CssBaseline />
+        <Toolbar>
+          <Typography variant="h5" className={classes.logo}>
+            <img width="35px" height="35px"
+              className="d-inline-block align-top img-responsive" src={Logo} alt="logo"/>
             {' '}
             Pilot Logbook
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-              <Nav.Link as={Link} to="/">Home</Nav.Link>
-              <Nav.Link as={Link} to="/skywest-import">Skywest Import</Nav.Link>
-              <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              </NavDropdown>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+          </Typography>
+          {isMobile ? (
+            <Drawer classes={classes}/>
+          ) : (
+            <div className={classes.navlinks}>
+              <Link to="/home" className={classes.link}>
+                Home
+              </Link>
+              <Link to="/skywest-import" className={classes.link}>
+                Skywest Import
+              </Link>
+              <Link to="/flight-table" className={classes.link}>
+                Flight Table
+              </Link>
+              <Link to="/register" className={classes.link}>
+                Register
+              </Link>
+              <Logout className={classes.link} />
+            </div>
+      )}
+        </Toolbar>
+      </AppBar>
+
     </>
   );
 }
-export default TopNav;
+
+export default Navbar;

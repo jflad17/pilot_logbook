@@ -6,6 +6,8 @@ from db.base import Base
 class User(Base):
     idUser = Column(Integer, primary_key=True)
     username = Column(String(100), nullable=False, unique=True)
+    firstName = Column(String(100), nullable=False)
+    lastName = Column(String(100), nullable=False)
     password = Column(CHAR(100), nullable=False)
     resetPassword = Column(Boolean, nullable=False, server_default="0")
     loginAttempts = Column(Integer, nullable=False, server_default="0")
