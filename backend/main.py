@@ -12,6 +12,10 @@ import uvicorn
 
 app = FastAPI(title=settings.PROJECT_NAME)
 
+if not settings.DEV: 
+    app.redoc_url = None
+    app.docs_url = None
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
