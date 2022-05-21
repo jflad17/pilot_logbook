@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import { Navbar, Nav, Container } from 'react-bootstrap';
 
 import Logo from '../../images/logo.png';
 import Logout from './Logout';
@@ -13,11 +12,11 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
-  makeStyles,
-} from '@material-ui/core';
+  styled,
+} from '@mui/material';
 import Drawer from './Drawer';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = styled((theme) => ({
   navlinks: {
     marginLeft: theme.spacing(5),
     display: 'flex',

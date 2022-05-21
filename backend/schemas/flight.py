@@ -1,30 +1,30 @@
 from .base import Base
-from datetime import date
+from datetime import date, time
 from schemas.aircraft_category import AircraftCategory
 from schemas.pilot_type import PilotType
 
 
 class Flight(Base):
-    idFlight: int
+    idFlight: int | None
     date: date
     aircraftType: str
     aircraftIdentity: str
     fromAirport: str
     toAirport: str
-    dayLanding: int
-    nightLanding: int
-    flightTime: float
-    nightTime: float
-    actualInstrument: float
-    simulatedInstrumentUnderHood: float
-    hold: int
-    simulator: float
-    crossCountryTime: float
+    departure: time
+    arrival: time
+    dayLanding: int | None
+    nightLanding: int | None
+    actualInstrument: float | None
+    simulatedInstrumentUnderHood: float | None
+    hold: int | None
+    simulator: float | None
+    crossCountryTime: float | None
     totalFlightDuration: float
-    initialOperatingExperience: bool
+    initialOperatingExperience: bool | None
     crewMemberName: str
-    airlineIdentifier: str
     flightNumber: str
+    AirlineIdentifier_idAirlineIdentifier: int
     AircraftCategory_idAircraftCategory: int
     PilotType_idPilotType: int
 

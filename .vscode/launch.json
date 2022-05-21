@@ -9,7 +9,7 @@
       "type": "pwa-chrome",
       "request": "launch",
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/src",
+      "webRoot": "${workspaceFolder}/frontend/src",
       "preLaunchTask": "npm: start"
     },
     {

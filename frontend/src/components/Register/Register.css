@@ -1,4 +1,13 @@
 .register-form {
-  padding-top: 150px!important;
-  width: 300px!important;
+  padding-top: 10%!important;
+  width: 350px!important;
+  max-width: 350px;
+  opacity: 75%;
+  
+}
+
+.register-bg {
+  background-color: white;
+  padding: 50px;
+  border-radius: 10px;
 }

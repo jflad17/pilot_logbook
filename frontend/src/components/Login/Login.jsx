@@ -13,7 +13,7 @@ import {
   CssBaseline,
   Button,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 
 /**
  *
@@ -115,7 +115,7 @@ const Login = () => {
               fullWidth
               variant="contained"
               color="info"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, opacity: 100 }}
               disabled={!validateForm()}
             >
               Login

@@ -71,7 +71,7 @@ def skywest_import_flight(
                     "PilotType_idPilotType": pilot_type_id,
                     "AircraftCategory_idAircraftCategory": aircraft_category_id,
                     "AirlineIdentifier_idAirlineIdentifier": airline_identifier_id,
-                    "User_idUser": 2,
+                    "User_idUser": 1,
                 }
             )
         try:

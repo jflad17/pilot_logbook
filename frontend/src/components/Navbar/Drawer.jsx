@@ -5,13 +5,13 @@ import {
   List,
   ListItem,
   ListItemText,
-  makeStyles,
-} from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
+  styled,
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
 import Logout from './Logout';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = styled(({ theme }) => ({
   navlinks: {
     marginLeft: theme.spacing(5),
     display: 'flex',

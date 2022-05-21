@@ -1,12 +1,12 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from 'react-query';
+import queryClient from '@services/queryClient';
 import bg from './images/sky.jpg';
 import './App.css';
 
 import ChildRoutes from './ChildRoutes';
 
-export const queryClient = new QueryClient();
 /**
  *
  * @return {Component} App Component
@@ -19,13 +19,13 @@ const App = () => {
   }, []);
 
   return (
-    <div>
+    <>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <ChildRoutes />
         </BrowserRouter>
       </QueryClientProvider>
-    </div>
+    </>
   );
 };
 

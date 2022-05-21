@@ -1,14 +1,14 @@
 import React from 'react';
 import { Container, FormControl, InputGroup, Button } from 'react-bootstrap';
 import Dropzone from 'react-dropzone';
+import { PropTypes } from 'prop-types';
 import './UploadFiles.css';
 
 /**
  *
  * @return {Component}
- * @param {type} type
  */
-function UploadFiles(type) {
+function UploadFiles({ type }) {
   // const [selectedFiles, setSelectedFiles] = React.useState(undefined);
   const [accepted, setAccepted] = React.useState([]);
   const [rejected, setRejected] = React.useState([]);
@@ -19,8 +19,8 @@ function UploadFiles(type) {
 
   const uploadFiles = () => {
     if (type === 'skywest') {
-      console.log(accepted);
-      // axios.post('/flight/skywest-import/');
+      console.log('accepted', accepted);
+      axios.post('/flight/skywest-import/');
     }
     console.log(message);
     setMessage([]);
@@ -132,3 +132,7 @@ function UploadFiles(type) {
   );
 }
 export default UploadFiles;
+
+UploadFiles.propTypes = {
+  type: PropTypes.string,
+};
