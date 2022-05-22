@@ -1,7 +1,8 @@
 import React from 'react';
 import Table from '@customComponents/Table/Table';
-import { Box, Button } from '@mui/material';
-
+import { Box, Button, IconButton } from '@mui/material';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import './FlightTable.css';
 
 import AddModal from './AddModal';
@@ -35,6 +36,40 @@ const FlightTable = () => {
   }, [isLoading, data]);
 
   const columns = React.useMemo(() => [
+    {
+      field: 'action',
+      headerName: 'Action',
+      sortable: false,
+      width: 120,
+      disableColumnMenu: true,
+      renderCell: (params) => {
+        const onClick = (e) => {
+          e.stopPropagation(); // don't select this row after clicking
+
+          const api = params.api;
+          const thisRow = {};
+
+          api
+              .getAllColumns()
+              .filter((c) => c.field !== '__check__' && !!c)
+              .forEach(
+                  (c) => (thisRow[c.field] = params.getValue(params.id, c.field)),
+              );
+
+          return alert(JSON.stringify(thisRow, null, 4));
+        };
+
+        return (
+          <>            <IconButton color="success" onClick={onClick}>
+            <ModeEditIcon/>
+          </IconButton>
+          <IconButton color="error" onClick={onClick}>
+            <DeleteIcon/>
+          </IconButton>
+          </>
+        );
+      },
+    },
     {
       headerName: 'Date',
       field: 'date',
@@ -150,7 +185,7 @@ const FlightTable = () => {
           className='flight-table-bg'>
           <center><h1>Flight Table</h1></center>
           {isLoading === false ? <Table rows={rows} columns={columns} /> : null}
-          <Button variant="contained" color="success" onClick={handleOpen}>Test</Button>
+          <Button variant="contained" color="primary" onClick={handleOpen}>Test</Button>
         </Box>
       </Box>
 
