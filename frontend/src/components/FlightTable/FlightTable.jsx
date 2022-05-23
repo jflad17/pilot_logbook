@@ -45,7 +45,7 @@ const FlightTable = () => {
       renderCell: (params) => {
         const onClick = (e) => {
           e.stopPropagation(); // don't select this row after clicking
-
+          console.log(params);
           const api = params.api;
           const thisRow = {};
 
@@ -60,12 +60,13 @@ const FlightTable = () => {
         };
 
         return (
-          <>            <IconButton color="success" onClick={onClick}>
-            <ModeEditIcon/>
-          </IconButton>
-          <IconButton color="error" onClick={onClick}>
-            <DeleteIcon/>
-          </IconButton>
+          <>
+            <IconButton color="success" onClick={onClick}>
+              <ModeEditIcon/>
+            </IconButton>
+            <IconButton color="error" onClick={onClick}>
+              <DeleteIcon/>
+            </IconButton>
           </>
         );
       },
