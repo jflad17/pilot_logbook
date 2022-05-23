@@ -4,35 +4,35 @@ import {
   IconButton,
   List,
   ListItem,
+  Typography,
   ListItemText,
   styled,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
+import Logo from '../../images/logo.png';
 import Logout from './Logout';
 
-const useStyles = styled(({ theme }) => ({
-  navlinks: {
-    marginLeft: theme.spacing(5),
-    display: 'flex',
-  },
-  logo: {
-    flexGrow: '2',
-    cursor: 'pointer',
-  },
-  link: {
-    'textDecoration': 'none',
-    'color': 'white',
-    'fontSize': '20px',
-    '&:hover': {
-      color: 'lightblue',
-      borderBottom: '1px solid white',
-    },
-  },
-  paper: {
-    background: 'dimgrey',
+// const NavLinks = styled('div')(({ theme }) => ({
+//   marginLeft: theme.spacing(5),
+//   display: 'flex',
+// }));
+
+
+const NavLink = styled(Link)(({ theme }) => ({
+  'textDecoration': 'none',
+  'color': 'white',
+  'fontSize': '20px',
+  'marginRight': theme.spacing(20),
+  '&:hover': {
+    color: 'lightblue',
+    borderBottom: '1px solid white',
   },
 }));
+
+const LogoBox = styled(Typography)({
+  cursor: 'pointer',
+});
 
 /**
  *
@@ -40,7 +40,6 @@ const useStyles = styled(({ theme }) => ({
  */
 function DrawerComponent() {
   const [openDrawer, setOpenDrawer] = useState(false);
-  const classes = useStyles();
 
   return (
     <>
@@ -50,32 +49,38 @@ function DrawerComponent() {
       <Drawer
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
-        classes={{ paper: classes.paper }}
+        PaperProps={{ sx: { background: 'dimgrey' } }}
       >
+        <LogoBox>
+          <img width="50px" height="50px"
+            className="d-inline-block align-top img-responsive" src={Logo} alt="logo"/>
+          {' '}
+          Pilot Logbook
+        </LogoBox>
         <List>
           <ListItem onClick={() => setOpenDrawer(false)}>
             <ListItemText>
-              <Link to="/home" className={classes.link}>Home</Link>
+              <NavLink to="/home">Home</NavLink>
             </ListItemText>
           </ListItem>
           <ListItem onClick={() => setOpenDrawer(false)}>
             <ListItemText>
-              <Link to="/skywest-import" className={classes.link}>Skywest Import</Link>
+              <NavLink to="/skywest-import">Skywest Import</NavLink>
             </ListItemText>
           </ListItem>
           <ListItem onClick={() => setOpenDrawer(false)}>
             <ListItemText>
-              <Link to="/flight-table" className={classes.link}>Flight Table</Link>
+              <NavLink to="/flight-table">Flight Table</NavLink>
             </ListItemText>
           </ListItem>
           <ListItem onClick={() => setOpenDrawer(false)}>
             <ListItemText>
-              <Link to="/register" className={classes.link}>Register</Link>
+              <NavLink to="/register">Register</NavLink>
             </ListItemText>
           </ListItem>
           <ListItem onClick={() => setOpenDrawer(false)}>
             <ListItemText>
-              <Logout className={classes.link} />
+              <Logout component={NavLink} />
             </ListItemText>
           </ListItem>
         </List>

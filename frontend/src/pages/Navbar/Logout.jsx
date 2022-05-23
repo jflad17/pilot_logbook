@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Logout = (props) => {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const Logout = (props) => {
   };
   if (token !== null && user !== null) {
     return (
-      <span><Link to="/" onClick={logout} {...props}>Logout</Link></span>
+      <span><props.component to="/" onClick={logout} {...props}>Logout</props.component></span>
     );
   } else {
     return;

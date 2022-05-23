@@ -8,7 +8,7 @@ import { PropTypes } from 'prop-types';
 function Table({ rows, columns }) {
   return (
     <>
-      <div style={{ height: 300, width: '100%' }}>
+      <div style={{ height: 600, width: '100%' }}>
         <DataGrid rows={rows} columns={columns}/>
       </div>
     </>
