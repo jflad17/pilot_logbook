@@ -2,13 +2,13 @@ import React from 'react';
 import { RequireToken } from './Auth';
 // import { useNavigate } from 'react-router-dom';
 import { Route, Routes, useLocation } from 'react-router-dom';
-import Navbar from './components/Navbar/Navbar';
-import Page404 from './components/Page404/Page404';
-import SkywestImport from './components/Imports/SkywestImport';
-import FlightTable from './components/FlightTable/FlightTable';
-import Login from './components/Login/Login';
-import Register from './components/Register/Register';
-import Home from './components/Home/Home';
+import Navbar from '@pages/Navbar/Navbar';
+import Page404 from '@pages/Page404/Page404';
+import SkywestImport from '@pages/Imports/SkywestImport';
+import FlightTable from '@pages/FlightTable/FlightTable';
+import Login from '@pages/Login/Login';
+import Register from '@pages/Register/Register';
+import Home from '@pages/Home/Home';
 
 /**
  * Routes for all page components

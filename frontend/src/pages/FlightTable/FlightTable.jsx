@@ -1,5 +1,5 @@
 import React from 'react';
-import Table from '@customComponents/Table/Table';
+import Table from '@components/Table/Table';
 import { Box, Button, IconButton } from '@mui/material';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -97,72 +97,72 @@ const FlightTable = () => {
       width: 150,
     },
     {
-      headerName: 'dayLanding',
+      headerName: 'Day Landing',
       field: 'dayLanding',
       width: 150,
     },
     {
-      headerName: 'nightLanding',
+      headerName: 'Night Landing',
       field: 'nightLanding',
       width: 150,
     },
     {
-      headerName: 'flightTime',
+      headerName: 'Flight Time',
       field: 'flightTime',
       width: 150,
     },
     {
-      headerName: 'nightTime',
+      headerName: 'Night Time',
       field: 'nightTime',
       width: 150,
     },
     {
-      headerName: 'actualInstrument',
+      headerName: 'Actual Instrument',
       field: 'actualInstrument',
       width: 150,
     },
     {
-      headerName: 'simulatedInstrumentUnderHood',
+      headerName: 'Sim. Instr. Under Hood',
       field: 'simulatedInstrumentUnderHood',
       width: 150,
     },
     {
-      headerName: 'hold',
+      headerName: 'Hold',
       field: 'hold',
       width: 150,
     },
     {
-      headerName: 'simulator',
+      headerName: 'Simulator',
       field: 'simulator',
       width: 150,
     },
     {
-      headerName: 'crossCountryTime',
+      headerName: 'Cross Country Time',
       field: 'crossCountryTime',
       width: 150,
     },
     {
-      headerName: 'totalFlightDuration',
+      headerName: 'Total Flight Duration',
       field: 'totalFlightDuration',
       width: 150,
     },
     {
-      headerName: 'initialOperatingExperience',
+      headerName: 'IOE',
       field: 'initialOperatingExperience',
       width: 150,
     },
     {
-      headerName: 'crewMemberName',
+      headerName: 'Other Pilot',
       field: 'crewMemberName',
       width: 150,
     },
     {
-      headerName: 'airlineIdentifier',
+      headerName: 'Airline',
       field: 'airlineIdentifier',
       width: 150,
     },
     {
-      headerName: 'flightNumber',
+      headerName: 'Flight Number',
       field: 'flightNumber',
       width: 150,
     },

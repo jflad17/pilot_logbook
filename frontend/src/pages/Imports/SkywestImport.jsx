@@ -1,5 +1,5 @@
 import React from 'react';
-import UploadFiles from '@customComponents/UploadFiles/UploadFiles';
+import UploadFiles from '@components/UploadFiles/UploadFiles';
 
 /**
  *

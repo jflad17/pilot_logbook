@@ -1,6 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import CustomizedDialogs from '@customComponents/Modal/Modal';
+import CustomizedDialogs from '@components/Modal/Modal';
+import { Paper } from '@mui/material';
 
 
 /**
@@ -14,7 +15,14 @@ const AddModal = ({ open, handleClose, handleOpen }) => {
   };
 
   const Content = () => {
-    return <><p>Testing para</p></>;
+    return (
+      <>
+        <Paper>
+          <h2>Add Flight</h2>
+
+        </Paper>
+      </>
+    );
   };
 
   return (
@@ -24,7 +32,7 @@ const AddModal = ({ open, handleClose, handleOpen }) => {
         Content={Content}
         handleClickOpen={handleOpen}
         handleClose={handleClose}
-        title={'test'}
+        title={'Add Flight'}
         Buttons={Buttons}
       />
     </>
