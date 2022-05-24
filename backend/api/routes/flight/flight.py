@@ -56,11 +56,14 @@ def skywest_import_flight(
             if name in captain:
                 crewMemberName = first_officer
                 pilot_type_id = first_officer_id
+            aircraft_type = row["A/C Type"]
+            if row["A/C Type"] == 'ER7':
+                aircraft_type = 'ERJ-170'
             data_list.append(
                 {
                     "date": datetime.strptime(row["Date"], "%m/%d/%Y").strftime("%Y-%m-%d"),
                     "flightNumber": str(row["Flight"]).strip("*"),
-                    "aircraftType": row["A/C Type"],
+                    "aircraftType": aircraft_type,
                     "aircraftIdentity": row["Tail"],
                     "fromAirport": row["Origin"],
                     "toAirport": row["Dest"],
