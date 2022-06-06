@@ -1,6 +1,8 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import skyError from '../../images/skyError.png';
+import bg from '@images/sky.jpg';
+import skyError from '@images/skyError.png';
+
 
 /**
  * 404 Page Component
@@ -8,6 +10,17 @@ import skyError from '../../images/skyError.png';
  */
 
 const Page404 = () => {
+  React.useEffect(() => {
+    document.body.style.backgroundImage = `url('${bg}')`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundRepeat = 'no-repeat';
+    return () => {
+      document.body.style.backgroundImage = '';
+      document.body.style.backgroundSize = '';
+      document.body.style.backgroundRepeat = '';
+      document.body.style.backgroundColor = 'white';
+    };
+  }, []);
   return (
     <>
       <div style={{ marginTop: '200px' }}>

@@ -4,7 +4,7 @@ import { RequireToken } from './Auth';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from '@pages/Navbar/Navbar';
 import Page404 from '@pages/Page404/Page404';
-import SkywestImport from '@pages/Imports/SkywestImport';
+import Import from '@pages/Imports/Import';
 import FlightTable from '@pages/FlightTable/FlightTable';
 import Login from '@pages/Login/Login';
 import Register from '@pages/Register/Register';
@@ -24,7 +24,7 @@ const ChildRoutes = () => {
         <Route exact path='/' element={<Login />} />
         <Route exact path='/register' element={<Register />} />
         <Route path='/home' element={<Home />} />
-        <Route path='/skywest-import' element={<RequireToken><SkywestImport /></RequireToken>} />
+        <Route path='/import' element={<RequireToken><Import /></RequireToken>} />
         <Route path='/flight-table' element={<RequireToken><FlightTable /></RequireToken>} />
         <Route path="*" element={<Page404 />}/>
       </Routes>

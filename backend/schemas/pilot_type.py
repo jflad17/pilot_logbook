@@ -5,3 +5,4 @@ class PilotType(Base):
     idPilotType: int
     shortName: str
     name: str
+    PIC: bool

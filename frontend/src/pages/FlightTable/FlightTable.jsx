@@ -1,12 +1,15 @@
 import React from 'react';
-import Table from '@components/Table/Table';
 import { Box, Button, IconButton } from '@mui/material';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import './FlightTable.css';
+
+import { useFlight } from '@api';
+import Table from '@components/Table/Table';
 
 import AddModal from './AddModal';
-import { useFlight } from '@api/flight';
+
+import './FlightTable.css';
+
 
 /**
  * Home Page Component
@@ -185,8 +188,8 @@ const FlightTable = () => {
         <Box
           className='flight-table-bg'>
           <center><h1>Flight Table</h1></center>
+          <Button variant="contained" color="primary" onClick={handleOpen}>Add</Button>
           {isLoading === false ? <Table rows={rows} columns={columns} /> : null}
-          <Button variant="contained" color="primary" onClick={handleOpen}>Test</Button>
         </Box>
       </Box>
 

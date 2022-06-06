@@ -5,13 +5,12 @@ import UploadFiles from '@components/UploadFiles/UploadFiles';
  *
  * @return {Component} SkywestImport Component
  */
-function SkywestImport() {
+function Import() {
   return (
     <>
-      <center><h2>Skywest File Import</h2></center>
-      <UploadFiles type={'skywest'}/>
+      <UploadFiles title='File Import'/>
     </>
   );
 }
 
-export default SkywestImport;
+export default Import;

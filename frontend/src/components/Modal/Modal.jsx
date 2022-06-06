@@ -50,7 +50,7 @@ BootstrapDialogTitle.propTypes = {
  *
  * @return {Component} CustomizedDialog Component
  */
-function CustomizedDialogs({ Content, handleClickOpen, open, handleClose, title, Buttons }) {
+function Modal({ Content, handleClickOpen, open, handleClose, title, Buttons }) {
   // const [open, setOpen] = React.useState(false);
 
   // const handleClickOpen = () => {
@@ -71,7 +71,7 @@ function CustomizedDialogs({ Content, handleClickOpen, open, handleClose, title,
           {title}
         </BootstrapDialogTitle>
         <DialogContent dividers>
-          <Content/>
+          <Content />
         </DialogContent>
         <DialogActions>
           <Buttons />
@@ -81,10 +81,10 @@ function CustomizedDialogs({ Content, handleClickOpen, open, handleClose, title,
   );
 }
 
-export default CustomizedDialogs;
+export default Modal;
 
-CustomizedDialogs.propTypes = {
-  Content: PropTypes.Component,
+Modal.propTypes = {
+  Content: PropTypes.func,
   handleClickOpen: PropTypes.func,
   open: PropTypes.bool,
   handleClose: PropTypes.func,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import Logo from '../../images/logo.png';
+import Logo from '@images/logo.png';
 import Logout from './Logout';
 // import { RequireToken } from '../../Auth';
 
@@ -63,8 +63,8 @@ function Navbar() {
             <NavLink to="/home">
                 Home
             </NavLink>
-            <NavLink to="/skywest-import">
-                Skywest Import
+            <NavLink to="/import">
+                Import
             </NavLink>
             <NavLink to="/flight-table">
                 Flight Table

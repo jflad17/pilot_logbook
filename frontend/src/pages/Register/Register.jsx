@@ -31,16 +31,7 @@ const Register = () => {
     e.preventDefault();
     if ((firstName === '') & (lastName === '') & (email === '') &
      (username === '') & (password === '') & (confirmPassword === '')) {
-      toast.error('All fields required!', {
-        position: 'top-center',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      },
-      );
+      toast.error('All fields required!');
     } else {
       if (password === confirmPassword) {
         const formData = new FormData();
@@ -59,32 +50,14 @@ const Register = () => {
                 setEmail('');
                 setUsername('');
                 setPassword('');
-                toast.success('User created!', {
-                  position: 'top-center',
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                },
-                );
+                toast.success('User created!');
               }
             }).catch((error) => {
-              console.error('Error creating user!');
+              toast.error('Error creating user!');
               throw error;
             });
       } else {
-        toast.error('Passwords do not match!', {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        },
-        );
+        toast.error('Passwords do not match!');
       }
     }
   };

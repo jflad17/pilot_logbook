@@ -1,10 +1,9 @@
 from dependencies import get_db
-from fastapi.datastructures import UploadFile
-from fastapi.params import File
-from fastapi import Depends, HTTPException
+from fastapi import Body, Depends, HTTPException, File, UploadFile
 from sqlalchemy.sql.expression import select, insert
 from sqlalchemy.orm import Session
 from fastapi_crudrouter import SQLAlchemyCRUDRouter as CRUDRouter
+from db.utils import queryset_to_list
 from datetime import datetime
 import pandas as pd
 import schemas as schemas
@@ -20,12 +19,18 @@ router = CRUDRouter(
 )
 
 #  = list[File(...)]
-@router.post("/skywest-import/", response_model=schemas.Flight)
+@router.post("/skywest-import/")
 def skywest_import_flight(
-    airline: str, name: str, files: list[UploadFile], db: Session = Depends(get_db)
+    files: list[UploadFile] = list[File(...)],
+    airline: str = Body(...),
+    name: str = Body(...), db: Session = Depends(get_db)
 ):
     message_list = []
+    file_list = queryset_to_list(db.execute('SELECT DISTINCT fileName FROM Flight'))
     for file in files:
+        if file.filename in file_list:
+            message_list.append([f'{file.filename} already exists!', 'warning'])
+            continue
         csv_reader = pd.read_csv(file.file)
         airline_identifier_id = db.execute(
             select(models.AirlineIdentifier.idAirlineIdentifier).where(
@@ -62,7 +67,6 @@ def skywest_import_flight(
             data_list.append(
                 {
                     "date": datetime.strptime(row["Date"], "%m/%d/%Y").strftime("%Y-%m-%d"),
-                    "flightNumber": str(row["Flight"]).strip("*"),
                     "aircraftType": aircraft_type,
                     "aircraftIdentity": row["Tail"],
                     "fromAirport": row["Origin"],
@@ -71,19 +75,23 @@ def skywest_import_flight(
                     "arrival": row["Arrive"],
                     "totalFlightDuration": hours,
                     "crewMemberName": crewMemberName,
-                    "PilotType_idPilotType": pilot_type_id,
-                    "AircraftCategory_idAircraftCategory": aircraft_category_id,
+                    "flightNumber": str(row["Flight"]).strip("*"),
+                    "fileName": file.filename,
                     "AirlineIdentifier_idAirlineIdentifier": airline_identifier_id,
+                    "AircraftCategory_idAircraftCategory": aircraft_category_id,
+                    "PilotType_idPilotType": pilot_type_id,
                     "User_idUser": 1,
                 }
             )
-        try:
-            db.execute(insert(models.Flight).values(data_list))
-            db.commit()
-            message_list.append(file.filename + " Uploaded Successfully!")
-        except Exception as err:
-            print(err)
-            db.rollback()
-            message_list.append(file.filename + " Failed Uploading!")
-            raise HTTPException(422, err)
+        if data_list:
+            try:
+                db.execute(insert(models.Flight).values(data_list))
+                db.commit()
+                message_list.append([file.filename + " Uploaded Successfully!", 'success'])
+            except Exception as err:
+                db.rollback()
+                message_list.append([file.filename + " Failed Uploading!", 'error'])
+                raise HTTPException(422, err)
+        else:
+            message_list.append([f'{file.filename} was empty, file not imported.', 'warning'])
     return message_list

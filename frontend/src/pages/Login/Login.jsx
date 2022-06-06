@@ -1,10 +1,13 @@
 import React from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Logo from '@images/logo.png';
+import bg from '@images/sky.jpg';
 import { setToken, fetchToken } from '../../Auth';
 import './Login.css';
 import {
   // createTheme,
+  styled,
   Switch,
   Box,
   TextField,
@@ -15,6 +18,10 @@ import {
   Typography,
 } from '@mui/material';
 
+
+const LogoBox = styled(Typography)({
+  flexGrow: '4', cursor: 'pointer',
+});
 /**
  *
  * @return {Component} Login Component
@@ -27,9 +34,18 @@ const Login = () => {
   const [rememberMe, setRememberMe] = React.useState(false);
 
   React.useEffect(() => {
+    document.body.style.backgroundImage = `url('${bg}')`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundRepeat = 'no-repeat';
     if (fetchToken()) {
       navigate('/home');
     }
+    return () => {
+      document.body.style.backgroundImage = '';
+      document.body.style.backgroundSize = '';
+      document.body.style.backgroundRepeat = '';
+      document.body.style.backgroundColor = 'white';
+    };
   }, []);
 
   const handleSubmit = async (e) => {
@@ -70,12 +86,18 @@ const Login = () => {
         <Box
           className='login-bg'
           sx={{
-            marginTop: 8,
+            marginTop: 4,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
           }}>
-          <Typography component="h1" variant="h5">
+          <LogoBox variant="h4">
+            <img width="35px" height="35px"
+              className="d-inline-block align-top img-responsive" src={Logo} alt="logo"/>
+            {' '}
+            Pilot Logbook
+          </LogoBox>
+          <Typography variant="h5">
                 Sign In
           </Typography>
           <Box component="form" style={{ opacity: '100%!important' }} onSubmit={handleSubmit} sx={{ mt: 1 }}>
