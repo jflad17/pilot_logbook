@@ -8,7 +8,7 @@ router = CRUDRouter(
     db_model=models.AirlineIdentifier,
     db=get_db,
     prefix="/airline-identifier",
-    tags=["airline identifier"],
-    delete_all_route=False,
-    get_one_route=False,
+    tags=["airline-identifier"],
+    # delete_all_route=False,
+    # get_one_route=False,
 )

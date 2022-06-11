@@ -10,5 +10,6 @@ router = CRUDRouter(
     db_model=models.PilotType,
     db=get_db,
     prefix="/pilot-type",
-    tags=["pilot type"],
+    tags=["pilot-type"],
+    delete_all_route=False
 )

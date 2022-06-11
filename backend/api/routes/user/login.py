@@ -1,6 +1,6 @@
 from datetime import timedelta
 from fastapi import APIRouter, Body, Depends, HTTPException
-from sqlalchemy import update, insert
+from sqlalchemy import update
 from fastapi.security import OAuth2PasswordRequestForm
 from core.security import ACCESS_TOKEN_EXPIRE_MINUTES, authenticate, create_access_token, get_user, get_password_hash, validate_password, verify_password
 from dependencies import get_db

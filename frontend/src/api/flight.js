@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { useQuery, useMutation } from 'react-query';
 import queryClient from '@services/queryClient';
-
-// import Toast from '@assets/js/toast.js';
+import { toast } from 'react-toastify';
 
 export const useFlight = (params) => {
   return useQuery(['flight', params], () => axios.get(`/flight/`, { params: params }).then((res) => res.data), {});
@@ -17,10 +16,10 @@ export const useCreateFlight = () => {
       queryClient.invalidateQueries('flight');
     },
     onSuccess: () => {
-      // new Toast().success('Successfully created flight.');
+      toast.success('Successfully created flight.');
     },
     onError: (err) => {
-      // new Toast().error('Error creating flight!');
+      toast.error('Error creating flight!');
       throw err;
     },
   });
@@ -34,10 +33,10 @@ export const useUpdateFlight = () => {
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries(['flight', variables.idFlight]);
       queryClient.invalidateQueries('flight');
-      // new Toast().success('Successfully updated flight.');
+      toast.success('Successfully updated flight.');
     },
     onError: (err) => {
-      // new Toast().error('Error updating employee!');
+      toast.error('Error updating employee!');
       throw err;
     },
   });
@@ -47,10 +46,10 @@ export const useDeleteFlight = () => {
   return useMutation((id) => axios.delete(`/flight/${id}`).then((res) => res), {
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries('flight');
-      // new Toast().success('Successfully deleted flight.');
+      toast.success('Successfully deleted flight.');
     },
     onError: (err) => {
-      // new Toast().error('Error deleting employee!');
+      toast.error('Error deleting employee!');
       throw err;
     },
   });

@@ -8,7 +8,7 @@ router = CRUDRouter(
     db_model=models.AircraftCategory,
     db=get_db,
     prefix="/aircraft-category",
-    tags=["aircraft category"],
+    tags=["aircraft-category"],
     delete_all_route=False,
     get_one_route=False,
 )

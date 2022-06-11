@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { useQuery, useMutation } from 'react-query';
 import queryClient from '@services/queryClient';
-
-// import Toast from '@assets/js/toast.js';
+import { toast } from 'react-toastify';
 
 export const useAircraftCategory = (params) => {
   return useQuery(['aircraftCategory', params], () => axios.get(`/aircraft-category/`, { params: params })
@@ -18,10 +17,10 @@ export const useCreateAircraftCategory = () => {
       queryClient.invalidateQueries('aircraftCategory');
     },
     onSuccess: () => {
-      // new Toast().success('Successfully created aircraftCategory.');
+      toast.success('Successfully created aircraftCategory.');
     },
     onError: (err) => {
-      // new Toast().error('Error creating aircraftCategory!');
+      toast.error('Error creating aircraftCategory!');
       throw err;
     },
   });
@@ -35,10 +34,10 @@ export const useUpdateAircraftCategory = () => {
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries(['aircraftCategory', variables.idAircraftCategory]);
       queryClient.invalidateQueries('aircraftCategory');
-      // new Toast().success('Successfully updated aircraftCategory.');
+      toast.success('Successfully updated aircraftCategory.');
     },
     onError: (err) => {
-      // new Toast().error('Error updating aircraftCategory!');
+      toast.error('Error updating aircraftCategory!');
       throw err;
     },
   });
@@ -48,10 +47,10 @@ export const useDeleteAircraftCategory = () => {
   return useMutation((id) => axios.delete(`/aircraft-category/${id}`).then((res) => res), {
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries('aircraftCategory');
-      // new Toast().success('Successfully deleted aircraftCategory.');
+      toast.success('Successfully deleted aircraftCategory.');
     },
     onError: (err) => {
-      // new Toast().error('Error deleting aircraftCategory!');
+      toast.error('Error deleting aircraftCategory!');
       throw err;
     },
   });

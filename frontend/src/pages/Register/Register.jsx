@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import {
   // createTheme,
   Box,
+  Paper,
   TextField,
   // ThemeProvider,
   Container,
@@ -44,7 +45,7 @@ const Register = () => {
             .then((response) => {
               console.log(response);
               if (response.data.access_token) {
-                setToken(response.data.access_token);
+                // setToken(response.data.access_token);
                 setFirstName('');
                 setLastName('');
                 setEmail('');
@@ -71,7 +72,7 @@ const Register = () => {
     <>
       <Container className="register-form" maxWidth="sm">
         <CssBaseline />
-        <Box
+        <Paper
           className='register-bg'
           sx={{
             marginTop: 4,
@@ -167,7 +168,7 @@ const Register = () => {
               Register
             </Button>
           </Box>
-        </Box>
+        </Paper>
       </Container>
     </>
   );

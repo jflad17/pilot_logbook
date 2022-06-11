@@ -10,7 +10,7 @@ router = APIRouter(
     tags=["register"],
 )
 
-@router.post('/')
+@router.post('/register')
 async def register(newUser: schemas.NewUser, db=Depends(get_db)):
   user = get_user(db, username=newUser.username)
   if user:
