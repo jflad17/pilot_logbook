@@ -27,12 +27,12 @@ export const useCreateAirlineIdentifier = () => {
 };
 
 export const useUpdateAirlineIdentifier = () => {
-  return useMutation((values) => axios.put(`/airline-identifier/${values.idFlight}`, values).then((res) => res.data), {
+  return useMutation((values) => axios.put(`/airline-identifier/${values.id}`, values).then((res) => res.data), {
     onMutate: (values) => {
-      queryClient.setQueryData(['airlineIdentifier', values.idFlight], values);
+      queryClient.setQueryData(['airlineIdentifier', values.id], values);
     },
     onSuccess: (data, variables) => {
-      queryClient.invalidateQueries(['airlineIdentifier', variables.idAircraftCategory]);
+      queryClient.invalidateQueries(['airlineIdentifier', variables.id]);
       queryClient.invalidateQueries('airlineIdentifier');
       toast.success('Successfully updated aircraftCategory.');
     },

@@ -9,7 +9,7 @@ class UserBase(Base):
     
 
 class User(UserBase):
-    idUser: int
+    id: int
     admin: bool
     resetPassword: bool
     loginAttempts: int

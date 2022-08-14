@@ -5,6 +5,7 @@ import models as models
 
 router = CRUDRouter(
     schema=schemas.AircraftCategory,
+    create_schema=schemas.AircraftCategory,
     db_model=models.AircraftCategory,
     db=get_db,
     prefix="/aircraft-category",

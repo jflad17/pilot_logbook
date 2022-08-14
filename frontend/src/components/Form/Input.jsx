@@ -10,9 +10,19 @@ import { TextField } from '@mui/material';
  * @param {props} props props
  * @return {JSX}
  */
-function Input({ type, defaultValue, label, name, control=null, width=null, ...props }) {
+function Input({ type, defaultValue, label, name, autoComplete=null, control=null, width=null, ...props }) {
   const _form = useFormContext();
-
+  console.log('DEFALT', defaultValue);
+  if (defaultValue === undefined) {
+    console.log('type', type);
+    if (type === 'number') {
+      console.log('here');
+      defaultValue = 0;
+    } else {
+      defaultValue = '';
+    }
+  }
+  console.log(defaultValue);
   if (control === undefined) {
     control = _form.control;
   }
@@ -21,14 +31,15 @@ function Input({ type, defaultValue, label, name, control=null, width=null, ...p
       <Controller
         control={control}
         name={name}
-        defaultValue={defaultValue ?? null}
+        defaultValue={defaultValue}
         render={({ field: { onChange, value }, fieldState, ...props }) => (
           <TextField
             sx={{ width: width ? width : '100%' }}
+            autoComplete={autoComplete}
             label={label}
             type={type}
             onChange={onChange}
-            value={value}
+            value={value !== undefined ? value : type === 'number' ? 0 : ''}
             margin="normal"
             error={Boolean(fieldState.error)}
             helperText={fieldState?.error?.message}
@@ -47,6 +58,7 @@ Input.propTypes = {
   label: PropTypes.string,
   name: PropTypes.string,
   width: PropTypes.number,
-  defaultValue: PropTypes.string,
+  defaultValue: PropTypes.any,
   type: PropTypes.string,
+  autoComplete: PropTypes.string,
 };

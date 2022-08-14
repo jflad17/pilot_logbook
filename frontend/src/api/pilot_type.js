@@ -27,12 +27,12 @@ export const useCreatePilotType = () => {
 };
 
 export const useUpdatePilotType = () => {
-  return useMutation((values) => axios.put(`/pilot-type/${values.idFlight}`, values).then((res) => res.data), {
+  return useMutation((values) => axios.put(`/pilot-type/${values.id}`, values).then((res) => res.data), {
     onMutate: (values) => {
-      queryClient.setQueryData(['pilotType', values.idFlight], values);
+      queryClient.setQueryData(['pilotType', values.id], values);
     },
     onSuccess: (data, variables) => {
-      queryClient.invalidateQueries(['pilotType', variables.idAircraftCategory]);
+      queryClient.invalidateQueries(['pilotType', variables.id]);
       queryClient.invalidateQueries('pilotType');
       toast.success('Successfully updated aircraftCategory.');
     },

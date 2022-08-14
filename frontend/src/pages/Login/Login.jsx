@@ -1,4 +1,5 @@
 import React from 'react';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Logo from '@images/logo.png';
@@ -57,18 +58,17 @@ const Login = () => {
       formData.append('username', username);
       formData.append('password', password);
       formData.append('rememberMe', rememberMe);
-      console.log(formData);
       axios.post(`/token/`, formData)
           .then((response) => {
-            console.log(response);
             if (response.data.access_token) {
               setToken(response.data.access_token, response.data.user);
               setUsername('');
               setPassword('');
               navigate('/home');
+              toast.success(`Welcome, ${response.data.user.firstName}`);
             }
           }).catch((error) => {
-            console.error('error', error);
+            toast.error('Error logging in!');
             throw error;
           });
     }

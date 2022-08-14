@@ -16,7 +16,7 @@ from db.base import Base
 
 
 class Flight(Base):
-    idFlight = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     date = Column(DATE, nullable=False)
     aircraftType = Column(VARCHAR(10), nullable=False)
     aircraftIdentity = Column(VARCHAR(9), nullable=False)
@@ -47,21 +47,21 @@ class Flight(Base):
         nullable=False,
         server_default=func.now()
     )
-    AirlineIdentifier_idAirlineIdentifier = Column(
-        Integer, ForeignKey("AirlineIdentifier.idAirlineIdentifier"), nullable=False
+    AirlineIdentifier_id = Column(
+        Integer, ForeignKey("AirlineIdentifier.id"), nullable=False
     )
 
-    AircraftCategory_idAircraftCategory = Column(
-        Integer, ForeignKey("AircraftCategory.idAircraftCategory"), nullable=False
+    AircraftCategory_id = Column(
+        Integer, ForeignKey("AircraftCategory.id"), nullable=False
     )
-    PilotType_idPilotType = Column(Integer, ForeignKey("PilotType.idPilotType"), nullable=False)
-    User_idUser = Column(Integer, ForeignKey("User.idUser"), nullable=False)
+    PilotType_id = Column(Integer, ForeignKey("PilotType.id"), nullable=False)
+    User_id = Column(Integer, ForeignKey("User.id"), nullable=False)
 
     airline_identifier = relationship(
-        "AirlineIdentifier", foreign_keys=AirlineIdentifier_idAirlineIdentifier, lazy="joined"
+        "AirlineIdentifier", foreign_keys=AirlineIdentifier_id, lazy="joined"
     )
     aircraft_category = relationship(
-        "AircraftCategory", foreign_keys=AircraftCategory_idAircraftCategory, lazy="joined"
+        "AircraftCategory", foreign_keys=AircraftCategory_id, lazy="joined"
     )
-    pilot_type = relationship("PilotType", foreign_keys=PilotType_idPilotType, lazy="joined")
-    user = relationship("User", foreign_keys=User_idUser, lazy="joined")
+    pilot_type = relationship("PilotType", foreign_keys=PilotType_id, lazy="joined")
+    user = relationship("User", foreign_keys=User_id, lazy="joined")

@@ -2,7 +2,7 @@ import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import PropTypes from 'prop-types';
 
-import { Switch, FormControlLabel } from '@mui/material';
+import { Switch, FormControlLabel, FormGroup } from '@mui/material';
 
 
 /**
@@ -17,17 +17,17 @@ function Switcher({ defaultValue, label, control, name, width, ...props }) {
     control = _form.control;
   }
   return (
-    <>
-      <Controller
-        control={control}
-        name={name}
-        defaultValue={defaultValue ?? null}
-        render={({ field: { onChange, value }, fieldState, ...props }) => (
+    <Controller
+      control={control}
+      name={name}
+      defaultValue={defaultValue ?? null}
+      render={({ field: { onChange, value }, fieldState, ...props }) => (
+        <FormGroup>
           <FormControlLabel
             label={label}
             control={
               <Switch
-                sx={{ width: width ? width : '100%' }}
+                // sx={{ width: width ? width : '100%' }}
                 onChange={onChange}
                 value={value}
                 margin="normal"
@@ -36,10 +36,9 @@ function Switcher({ defaultValue, label, control, name, width, ...props }) {
                 {...props}
               />}
           />
-        )}
-
-      />
-    </>
+        </FormGroup>
+      )}
+    />
   );
 }
 export default Switcher;

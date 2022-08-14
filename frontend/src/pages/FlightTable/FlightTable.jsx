@@ -6,7 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useFlight } from '@api';
 import Table from '@components/Table/Table';
 
-import AddModal from './AddModal';
+import EditModal from './EditModal';
 
 import './FlightTable.css';
 
@@ -18,21 +18,24 @@ import './FlightTable.css';
 
 const FlightTable = () => {
   const { data, isLoading } = useFlight();
-  console.log('data isloading', data, isLoading);
   const [rows, setRows] = React.useState([]);
   const [open, setOpen] = React.useState(false);
+  const [editData, setEditData] = React.useState({});
   const handleClose = () => {
     setOpen(false);
+    setEditData({});
   };
+
   const handleOpen = () => {
     setOpen(true);
+    setEditData({});
   };
 
   React.useEffect(() => {
     if (isLoading === false) {
       const newRows = [];
       for (const d of data) {
-        newRows.push({ id: d.idFlight, ...d });
+        newRows.push({ id: d.id, ...d });
       }
       setRows([...newRows]);
     }
@@ -48,18 +51,20 @@ const FlightTable = () => {
       renderCell: (params) => {
         const onClick = (e) => {
           e.stopPropagation(); // don't select this row after clicking
-          console.log(params);
-          const api = params.api;
-          const thisRow = {};
-
-          api
-              .getAllColumns()
-              .filter((c) => c.field !== '__check__' && !!c)
-              .forEach(
-                  (c) => (thisRow[c.field] = params.getValue(params.id, c.field)),
-              );
-
-          return alert(JSON.stringify(thisRow, null, 4));
+          // const api = params.api;
+          // const thisRow = {};
+          // console.log('params', params);
+          // api
+          //     .getAllColumns()
+          //     .filter((c) => c.field !== '__check__' && !!c)
+          //     .forEach(
+          //         (c) => (thisRow[c.field] = params.getValue(params.id, c.field)),
+          //     );
+          // console.log('all', api.getAllColumns().filter((c) => c.field !== '__check__' && !!c)
+          //     .forEach((c) => console.log('c', c)));
+          // console.log('thisRoW', thisRow);
+          setOpen(true);
+          setEditData(params.row);
         };
 
         return (
@@ -100,6 +105,11 @@ const FlightTable = () => {
       width: 150,
     },
     {
+      headerName: 'Total Flight Duration',
+      field: 'totalFlightDuration',
+      width: 150,
+    },
+    {
       headerName: 'Day Landing',
       field: 'dayLanding',
       width: 150,
@@ -107,16 +117,6 @@ const FlightTable = () => {
     {
       headerName: 'Night Landing',
       field: 'nightLanding',
-      width: 150,
-    },
-    {
-      headerName: 'Flight Time',
-      field: 'flightTime',
-      width: 150,
-    },
-    {
-      headerName: 'Night Time',
-      field: 'nightTime',
       width: 150,
     },
     {
@@ -130,13 +130,28 @@ const FlightTable = () => {
       width: 150,
     },
     {
+      headerName: 'ATD Instrument',
+      field: 'atdInstrument',
+      width: 150,
+    },
+    {
       headerName: 'Hold',
       field: 'hold',
       width: 150,
     },
     {
-      headerName: 'Simulator',
-      field: 'simulator',
+      headerName: 'Full Flight Sim.',
+      field: 'fullFlightSim',
+      width: 150,
+    },
+    {
+      headerName: 'Ground Trainer',
+      field: 'groundTrainer',
+      width: 150,
+    },
+    {
+      headerName: 'Line Check',
+      field: 'lineCheck',
       width: 150,
     },
     {
@@ -145,23 +160,28 @@ const FlightTable = () => {
       width: 150,
     },
     {
-      headerName: 'Total Flight Duration',
-      field: 'totalFlightDuration',
-      width: 150,
-    },
-    {
       headerName: 'IOE',
       field: 'initialOperatingExperience',
       width: 150,
     },
     {
-      headerName: 'Other Pilot',
-      field: 'crewMemberName',
+      headerName: 'Remarks',
+      field: 'remarks',
       width: 150,
     },
     {
-      headerName: 'Airline',
-      field: 'airlineIdentifier',
+      headerName: 'Approaches',
+      field: 'approaches',
+      width: 150,
+    },
+    {
+      headerName: 'Approach Type',
+      field: 'approachType',
+      width: 150,
+    },
+    {
+      headerName: 'Other Pilot',
+      field: 'crewMemberName',
       width: 150,
     },
     {
@@ -171,13 +191,27 @@ const FlightTable = () => {
     },
     {
       headerName: 'Aircraft Category',
-      field: 'aircraft_category.shortName',
+      field: 'aircraft_category',
       width: 150,
+      renderCell: (params) => {
+        return <div className="rowitem">{params.row.aircraft_category.shortName}</div>;
+      },
     },
     {
       headerName: 'Pilot Type',
-      field: 'pilot_type.shortName',
+      field: 'pilot_type',
       width: 150,
+      renderCell: (params) => {
+        return <div className='rowitem'>{params.row.pilot_type.shortName}</div>;
+      },
+    },
+    {
+      headerName: 'Airline',
+      field: 'airline_identifier',
+      width: 150,
+      renderCell: (params) => {
+        return <div className='rowitem'>{params.row.airline_identifier.name}</div>;
+      },
     },
   ], []);
 
@@ -193,7 +227,7 @@ const FlightTable = () => {
         </Box>
       </Box>
 
-      <AddModal open={open} handleClose={handleClose} handleOpen={handleOpen} />
+      <EditModal open={open} editData={editData} handleClose={handleClose} handleOpen={handleOpen} />
     </>
   );
 };

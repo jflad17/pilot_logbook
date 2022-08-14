@@ -42,15 +42,15 @@ const BootstrapDialogTitle = (props) => {
 };
 
 BootstrapDialogTitle.propTypes = {
-  children: PropTypes.children,
-  onClose: PropTypes.function,
+  children: PropTypes.any,
+  onClose: PropTypes.any,
 };
 
 /**
  *
  * @return {Component} CustomizedDialog Component
  */
-function Modal({ Content, handleClickOpen, open, handleClose, title, Buttons }) {
+function Modal({ Content, handleClickOpen, open, handleClose, title, Buttons, useForm = False, onSubmit=null }) {
   // const [open, setOpen] = React.useState(false);
 
   // const handleClickOpen = () => {
@@ -70,12 +70,25 @@ function Modal({ Content, handleClickOpen, open, handleClose, title, Buttons }) 
         <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
           {title}
         </BootstrapDialogTitle>
-        <DialogContent dividers>
-          <Content />
-        </DialogContent>
-        <DialogActions>
-          <Buttons />
-        </DialogActions>
+        {useForm === true ? (
+          <form onSubmit={onSubmit} noValidate>
+            <DialogContent dividers>
+              <Content />
+            </DialogContent>
+            <DialogActions>
+              <Buttons />
+            </DialogActions>
+          </form>
+        ) : (
+          <>
+            <DialogContent dividers>
+              <Content />
+            </DialogContent>
+            <DialogActions>
+              <Buttons />
+            </DialogActions>
+          </>
+          )}
       </BootstrapDialog>
     </div>
   );
@@ -89,5 +102,7 @@ Modal.propTypes = {
   open: PropTypes.bool,
   handleClose: PropTypes.func,
   title: PropTypes.string,
-  Buttons: PropTypes.Component,
+  Buttons: PropTypes.any,
+  useForm: PropTypes.bool,
+  onSubmit: PropTypes.func,
 };

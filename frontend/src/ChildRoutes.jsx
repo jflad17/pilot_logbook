@@ -22,8 +22,8 @@ const ChildRoutes = () => {
       {pathname !== '/' && <Navbar /> }
       <Routes>
         <Route exact path='/' element={<Login />} />
-        <Route exact path='/register' element={<Register />} />
-        <Route path='/home' element={<Home />} />
+        <Route exact path='/register' element={<RequireToken><Register /></RequireToken>} />
+        <Route path='/home' element={<RequireToken><Home /></RequireToken>} />
         <Route path='/import' element={<RequireToken><Import /></RequireToken>} />
         <Route path='/flight-table' element={<RequireToken><FlightTable /></RequireToken>} />
         <Route path="*" element={<Page404 />}/>

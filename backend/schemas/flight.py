@@ -32,13 +32,13 @@ class FlightBase(Base):
     flightNumber: str
     fileName: str | None
     timestamp: datetime
-    AirlineIdentifier_idAirlineIdentifier: int
-    AircraftCategory_idAircraftCategory: int
-    PilotType_idPilotType: int
-    User_idUser: int
+    AirlineIdentifier_id: int
+    AircraftCategory_id: int
+    PilotType_id: int
+    User_id: int
 
 class Flight(FlightBase):
-    idFlight: int | None
+    id: int | None
     airline_identifier: AirlineIdentifier
     aircraft_category: AircraftCategory
     pilot_type: PilotType

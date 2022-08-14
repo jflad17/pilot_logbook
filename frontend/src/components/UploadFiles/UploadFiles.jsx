@@ -10,6 +10,7 @@ import { useAirlineIdentifier } from '@api';
 import { AutoComplete } from '@components';
 
 import './UploadFiles.css';
+import { fetchUser } from '../../Auth';
 
 /**
  *
@@ -30,9 +31,10 @@ function UploadFiles({ title }) {
       for (const a of accepted) {
         formData.append('files', a);
       }
+      formData.append('User_id', fetchUser().id);
       formData.append('airline', airline);
       formData.append('name', name);
-      await axios.post('/flight/skywest-import/',
+      await axios.post('/imports/skywest/',
           formData, { headers: { 'Content-Type': 'multipart/form-data' } })
           .then((response) => {
             for (const [d, t] of response.data) {
@@ -65,7 +67,7 @@ function UploadFiles({ title }) {
   });
 
   const rejectedFiles = rejected.map(({ file, errors }) => {
-    console.log(file, errors);
+    // console.log(file, errors);
     return (
       <li key={file.path}>
         {file.path} - {file.size} bytes
@@ -101,21 +103,23 @@ function UploadFiles({ title }) {
           >
             <AutoComplete
               label='Airline'
-              name='AirlineIdentifier_idAirlineIdentifier'
+              name='AirlineIdentifier_id'
               data={airlineIdentifier.data}
               isLoading={airlineIdentifier.isLoading}
               getOptionLabel={(option) => `${option.name}`}
               onChange={(e, data) => {
-                console.log('data', data);
+                // console.log('data', data);
                 setAirline(data ? data.name: null);
               }}
               defaultValue={airline}
+              disabled
             />
             <TextField
               required
               label="Pilot"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              disabled
             />
           </Box>
         </center>
@@ -123,7 +127,7 @@ function UploadFiles({ title }) {
           <div className="container-fluid py-2 dropzone-container">
             <Dropzone
               onDropAccepted={(files) => {
-                console.log(files);
+                // console.log(files);
                 setAccepted(accepted.concat(files));
               }}
               onDropRejected={(files) => setRejected(rejected.concat(files))}

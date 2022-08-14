@@ -26,12 +26,12 @@ export const useCreateFlight = () => {
 };
 
 export const useUpdateFlight = () => {
-  return useMutation((values) => axios.put(`/flight/${values.idFlight}`, values).then((res) => res.data), {
+  return useMutation((values) => axios.put(`/flight/${values.id}`, values).then((res) => res.data), {
     onMutate: (values) => {
-      queryClient.setQueryData(['flight', values.idFlight], values);
+      queryClient.setQueryData(['flight', values.id], values);
     },
     onSuccess: (data, variables) => {
-      queryClient.invalidateQueries(['flight', variables.idFlight]);
+      queryClient.invalidateQueries(['flight', variables.id]);
       queryClient.invalidateQueries('flight');
       toast.success('Successfully updated flight.');
     },

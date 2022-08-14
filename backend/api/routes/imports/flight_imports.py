@@ -14,7 +14,8 @@ router = APIRouter(
 
 @router.post("/skywest/")
 def skywest(
-    files: list[UploadFile] = list[File(...)],
+    files: list[UploadFile],
+    User_id: int = Body(...),
     airline: str = Body(...),
     name: str = Body(...), db: Session = Depends(get_db)
 ):
@@ -26,18 +27,18 @@ def skywest(
             continue
         csv_reader = pd.read_csv(file.file)
         airline_identifier_id = db.execute(
-            select(models.AirlineIdentifier.idAirlineIdentifier).where(
+            select(models.AirlineIdentifier.id).where(
                 models.AirlineIdentifier.name == airline
             )
         ).scalar_one()
         captain_id = db.execute(
-            select(models.PilotType.idPilotType).where(models.PilotType.shortName == "PIC")
+            select(models.PilotType.id).where(models.PilotType.shortName == "PIC")
         ).scalar_one()
         first_officer_id = db.execute(
-            select(models.PilotType.idPilotType).where(models.PilotType.shortName == "SIC")
+            select(models.PilotType.id).where(models.PilotType.shortName == "SIC")
         ).scalar_one()
         aircraft_category_id = db.execute(
-            select(models.AircraftCategory.idAircraftCategory).where(
+            select(models.AircraftCategory.id).where(
                 models.AircraftCategory.shortName == "MEL"
             )
         ).scalar_one()
@@ -70,10 +71,10 @@ def skywest(
                     "crewMemberName": crewMemberName,
                     "flightNumber": str(row["Flight"]).strip("*"),
                     "fileName": file.filename,
-                    "AirlineIdentifier_idAirlineIdentifier": airline_identifier_id,
-                    "AircraftCategory_idAircraftCategory": aircraft_category_id,
-                    "PilotType_idPilotType": pilot_type_id,
-                    "User_idUser": 1,
+                    "AirlineIdentifier_id": airline_identifier_id,
+                    "AircraftCategory_id": aircraft_category_id,
+                    "PilotType_id": pilot_type_id,
+                    "User_id": User_id,
                 }
             )
         if data_list:
