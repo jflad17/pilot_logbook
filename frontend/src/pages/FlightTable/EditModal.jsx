@@ -187,12 +187,9 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
             name='AirlineIdentifier_id'
             data={airlineIdentifier.data}
             isLoading={airlineIdentifier.isLoading}
-            getOptionLabel={(option) => option.name}
-            // renderOption={(props, option, state) => (
-            //   <span key={`${option.name}`}>
-            //     {option.name}
-            //   </span>
-            // )}
+            setOptions={(option) => ({
+              value: option.id, label: option.name,
+            })}
           />
           <Datepicker
             control={control}
@@ -342,7 +339,9 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
             name='PilotType_id'
             data={pilotType.data}
             isLoading={pilotType.isLoading}
-            getOptionLabel={(option) => `${option.shortName}`}
+            setOptions={(option) => ({
+              value: option.id, label: option.shortName,
+            })}
           />
           <AutoComplete
             control={control}
@@ -350,7 +349,9 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
             name='AircraftCategory_id'
             data={aircraftCategory.data}
             isLoading={aircraftCategory.isLoading}
-            getOptionLabel={(option) => `${option.shortName}`}
+            setOptions={(option) => ({
+              value: option.id, label: option.shortName,
+            })}
           />
         </Paper>
       </>

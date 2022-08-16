@@ -12,9 +12,7 @@ import { TextField } from '@mui/material';
  */
 function Input({ type, defaultValue, label, name, autoComplete=null, control=null, width=null, ...props }) {
   const _form = useFormContext();
-  console.log('DEFALT', defaultValue);
   if (defaultValue === undefined) {
-    console.log('type', type);
     if (type === 'number') {
       console.log('here');
       defaultValue = 0;
@@ -22,7 +20,6 @@ function Input({ type, defaultValue, label, name, autoComplete=null, control=nul
       defaultValue = '';
     }
   }
-  console.log(defaultValue);
   if (control === undefined) {
     control = _form.control;
   }
