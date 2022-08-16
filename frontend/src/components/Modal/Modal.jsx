@@ -63,7 +63,11 @@ function Modal({ Content, handleClickOpen, open, handleClose, title, Buttons, us
   return (
     <div>
       <BootstrapDialog
-        onClose={handleClose}
+        onClose={(_, reason) => {
+          if (reason !== 'backdropClick') {
+            handleClose();
+          }
+        }}
         aria-labelledby="customized-dialog-title"
         open={open}
       >

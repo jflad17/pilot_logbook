@@ -1,4 +1,5 @@
 import React from 'react';
+import { DateTime } from 'luxon';
 import { Box, Button, IconButton } from '@mui/material';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -83,6 +84,9 @@ const FlightTable = () => {
       headerName: 'Date',
       field: 'date',
       width: 150,
+      renderCell: (params) => {
+        return <div className='rowitem'>{DateTime.fromSQL(params.row.date).toLocaleString(DateTime.DATE_SHORT)}</div>;
+      },
     },
     {
       headerName: 'Type',

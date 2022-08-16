@@ -29,22 +29,22 @@ function Input({ type, defaultValue, label, name, autoComplete=null, control=nul
         control={control}
         name={name}
         defaultValue={defaultValue}
-        render={({ field: { onChange, value }, fieldState, ...props }) => (
-          <TextField
-            sx={{ width: width ? width : '100%' }}
-            autoComplete={autoComplete}
-            label={label}
-            type={type}
-            onChange={onChange}
-            value={value !== undefined ? value : type === 'number' ? 0 : ''}
-            margin="normal"
-            error={Boolean(fieldState.error)}
-            helperText={fieldState?.error?.message}
-            {...props}
-
-          />
-        )}
-
+        render={({ field, fieldState }) => {
+          // console.log('value', (value !== undefined && value !== null) ? value : defaultValue);
+          return (
+            <TextField
+              {...field}
+              sx={{ width: width ? width : '100%' }}
+              autoComplete={autoComplete}
+              label={label}
+              type={type}
+              // value={value !== undefined ? value : type === 'number' ? 0 : ''}
+              // value={(value !== undefined && value !== null) ? value : defaultValue}
+              margin="normal"
+              error={Boolean(fieldState.error)}
+              helperText={fieldState?.error?.message}
+            />);
+        }}
       />
     </>
   );

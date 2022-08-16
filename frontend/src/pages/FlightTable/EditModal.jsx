@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { PropTypes } from 'prop-types';
+import { DateTime } from 'luxon';
 
 import
 {
@@ -19,8 +20,8 @@ import
   useAircraftCategory,
   useAirlineIdentifier,
   usePilotType,
-  // useCreateFlight,
-  // useUpdateFlight,
+  useCreateFlight,
+  useUpdateFlight,
 } from '@api';
 import { Modal } from '@components';
 import { AutoComplete,
@@ -41,8 +42,8 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
   const airlineIdentifier = useAirlineIdentifier();
   const pilotType = usePilotType();
 
-  // const createFlightMutation = useCreateFlight();
-  // const updateFlightMutation = useUpdateFlight();
+  const createFlightMutation = useCreateFlight();
+  const updateFlightMutation = useUpdateFlight();
 
   const defaultValues = React.useMemo(() => {
     return {
@@ -54,19 +55,19 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
       departure: '',
       arrival: '',
       totalFlightDuration: '',
-      dayLanding: '',
-      nightLanding: '',
-      actualInstrument: '',
-      simulatedInstrumentUnderHood: '',
-      atdInstrument: '',
+      dayLanding: 0,
+      nightLanding: 0,
+      actualInstrument: 0,
+      simulatedInstrumentUnderHood: 0,
+      atdInstrument: 0,
       hold: false,
-      fullFlightSim: '',
-      groundTrainer: '',
+      fullFlightSim: 0,
+      groundTrainer: 0,
       lineCheck: false,
-      crossCountryTime: '',
+      crossCountryTime: 0,
       initialOperatingExperience: false,
       remarks: '',
-      approaches: '',
+      approaches: 0,
       approachType: '',
       crewMemberName: '',
       flightNumber: '',
@@ -88,40 +89,40 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
         'is-decimal',
         'Invalid decimal',
         (value) => (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
-    dayLanding: number(),
-    nightLanding: number(),
-    actualInstrument: number().test(
+    dayLanding: number().nullable(),
+    nightLanding: number().nullable(),
+    actualInstrument: number().nullable().test(
         'is-decimal',
         'Invalid decimal',
-        (value) => (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
-    simulatedInstrumentUnderHood: number().test(
+        (value) => !value || (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
+    simulatedInstrumentUnderHood: number().nullable().test(
         'is-decimal',
         'Invalid decimal',
-        (value) => (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
-    atdInstrument: number().test(
+        (value) => !value || (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
+    atdInstrument: number().nullable().test(
         'is-decimal',
         'Invalid decimal',
-        (value) => (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
+        (value) => !value || (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
     hold: bool(),
-    fullFlightSim: number().test(
+    fullFlightSim: number().nullable().test(
         'is-decimal',
         'Invalid decimal',
-        (value) => (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
-    groundTrainer: number().test(
+        (value) => !value || (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
+    groundTrainer: number().nullable().test(
         'is-decimal',
         'Invalid decimal',
-        (value) => (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
-    lineCheck: bool(),
-    crossCountryTime: number(),
-    initialOperatingExperience: bool(),
+        (value) => !value || (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
+    lineCheck: bool().default(false),
+    crossCountryTime: number().nullable().default(0),
+    initialOperatingExperience: bool().default(false),
     remarks: string().nullable(),
-    approaches: number(),
+    approaches: number().nullable().default(0),
     approachType: string().nullable(),
     crewMemberName: string().required(),
     flightNumber: string().required(),
-    AirlineIdentifier_id: number().required('Number required'),
-    AircraftCategory_id: number().required(),
-    PilotType_id: number().required(),
+    AirlineIdentifier_id: number().required('Airline required'),
+    AircraftCategory_id: number().required('Aircraft required'),
+    PilotType_id: number().required('Pilot Type required'),
   });
 
   const resolver = useYupResolver(validationSchema);
@@ -167,14 +168,15 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
   const onSubmitHandler = (data) => {
     console.log('errors', errors);
     console.log('data', data);
+    data.date = DateTime.fromJSDate(data.date).toFormat('yyyy-MM-dd');
     data.User_id = fetchUser().id;
-
-    // if (editData) {
-    //   data.id = editData.id;
-    //   updateFlightMutation.mutate(data);
-    // } else {
-    //   createFlightMutation.mutate(data);
-    // }
+    console.log(data);
+    if (editData) {
+      data.id = editData.id;
+      updateFlightMutation.mutate(data);
+    } else {
+      createFlightMutation.mutate(data);
+    }
   };
 
   const Content = () => {
