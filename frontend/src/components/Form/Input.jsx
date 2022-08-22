@@ -14,7 +14,6 @@ function Input({ type, defaultValue, label, name, autoComplete=null, control=nul
   const _form = useFormContext();
   if (defaultValue === undefined) {
     if (type === 'number') {
-      console.log('here');
       defaultValue = 0;
     } else {
       defaultValue = '';

@@ -39,7 +39,7 @@ class Flight(Base):
     remarks = Column(VARCHAR(255))
     approaches = Column(Integer)
     approachType = Column(VARCHAR(255))
-    crewMemberName = Column(VARCHAR(100), nullable=False)
+    crewMemberName = Column(VARCHAR(100))
     flightNumber = Column(VARCHAR(4), nullable=False)
     fileName  = Column(VARCHAR(50))
     timestamp = Column(
@@ -58,10 +58,10 @@ class Flight(Base):
     User_id = Column(Integer, ForeignKey("User.id"), nullable=False)
 
     airline_identifier = relationship(
-        "AirlineIdentifier", foreign_keys=AirlineIdentifier_id, lazy="joined"
+        "AirlineIdentifier", lazy="joined"
     )
     aircraft_category = relationship(
-        "AircraftCategory", foreign_keys=AircraftCategory_id, lazy="joined"
+        "AircraftCategory", lazy="joined"
     )
-    pilot_type = relationship("PilotType", foreign_keys=PilotType_id, lazy="joined")
-    user = relationship("User", foreign_keys=User_id, lazy="joined")
+    pilot_type = relationship("PilotType", lazy="joined")
+    user = relationship("User", lazy="joined")

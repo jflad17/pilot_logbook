@@ -1,3 +1,4 @@
+from typing import Optional
 from .base import Base
 from datetime import date, datetime, time
 from schemas.aircraft_category import AircraftCategory
@@ -11,35 +12,35 @@ class FlightBase(Base):
     aircraftIdentity: str
     fromAirport: str
     toAirport: str
-    departure: time | None
-    arrival: time | None
+    departure: Optional[time] 
+    arrival: Optional[time]
     totalFlightDuration: float
-    dayLanding: int | None
-    nightLanding: int | None
-    actualInstrument: float | None
-    simulatedInstrumentUnderHood: float | None
-    atdInstrument: float | None
-    hold: bool | None
-    fullFlightSim: float | None
-    groundTrainer: float | None
-    lineCheck: bool | None
-    crossCountryTime: float | None
-    initialOperatingExperience: bool | None
-    remarks: str | None
-    approaches: int | None
-    approachType: str | None
+    dayLanding: Optional[int]
+    nightLanding: Optional[int]
+    actualInstrument: Optional[float]
+    simulatedInstrumentUnderHood:  Optional[float]
+    atdInstrument: Optional[float]
+    hold: Optional[bool]
+    fullFlightSim: Optional[float]
+    groundTrainer: Optional[float]
+    lineCheck: Optional[bool]
+    crossCountryTime: Optional[float]
+    initialOperatingExperience: bool
+    remarks: Optional[str]
+    approaches: Optional[int]
+    approachType: Optional[str]
     crewMemberName: str
     flightNumber: str
-    fileName: str | None
-    timestamp: datetime
+    fileName: Optional[str]
+    timestamp: Optional[datetime]
     AirlineIdentifier_id: int
     AircraftCategory_id: int
     PilotType_id: int
     User_id: int
 
 class Flight(FlightBase):
-    id: int | None
-    airline_identifier: AirlineIdentifier
-    aircraft_category: AircraftCategory
-    pilot_type: PilotType
-    user: User
+    id: Optional[int]
+    airline_identifier:  Optional[AirlineIdentifier]
+    aircraft_category:  Optional[AircraftCategory]
+    pilot_type:  Optional[PilotType]
+    user:  Optional[User]

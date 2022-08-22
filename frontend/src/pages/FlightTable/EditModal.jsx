@@ -37,7 +37,6 @@ import { fetchUser } from '../../Auth';
  */
 
 const EditModal = ({ open, handleClose, handleOpen, editData }) => {
-  console.log('editdata', editData);
   const aircraftCategory = useAircraftCategory();
   const airlineIdentifier = useAirlineIdentifier();
   const pilotType = usePilotType();
@@ -118,7 +117,7 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
     remarks: string().nullable(),
     approaches: number().nullable().default(0),
     approachType: string().nullable(),
-    crewMemberName: string().required(),
+    crewMemberName: string().nullable(),
     flightNumber: string().required(),
     AirlineIdentifier_id: number().required('Airline required'),
     AircraftCategory_id: number().required('Aircraft required'),
@@ -144,7 +143,6 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
       reset(defaultValues);
     } else {
       if (open && Object.keys(editData).length > 0) {
-        console.log('editData', editData);
         mapValues(editData, (value, key) => {
           setValue(key, value);
         });
@@ -167,15 +165,15 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
 
   const onSubmitHandler = (data) => {
     console.log('errors', errors);
-    console.log('data', data);
     data.date = DateTime.fromJSDate(data.date).toFormat('yyyy-MM-dd');
     data.User_id = fetchUser().id;
-    console.log(data);
-    if (editData) {
+    if (editData.length > 0) {
       data.id = editData.id;
       updateFlightMutation.mutate(data);
+      handleClose();
     } else {
       createFlightMutation.mutate(data);
+      handleClose();
     }
   };
 
@@ -193,6 +191,26 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
               value: option.id, label: option.name,
             })}
           />
+          <AutoComplete
+            control={control}
+            label='Pilot Type'
+            name='PilotType_id'
+            data={pilotType.data}
+            isLoading={pilotType.isLoading}
+            setOptions={(option) => ({
+              value: option.id, label: option.shortName,
+            })}
+          />
+          <AutoComplete
+            control={control}
+            label='Aircraft'
+            name='AircraftCategory_id'
+            data={aircraftCategory.data}
+            isLoading={aircraftCategory.isLoading}
+            setOptions={(option) => ({
+              value: option.id, label: option.shortName,
+            })}
+          />
           <Datepicker
             control={control}
             label='Date'
@@ -204,6 +222,12 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
             type="text"
             name="aircraftType"
             label="Aircraft Type"
+          />
+          <Input
+            control={control}
+            type="text"
+            name="aircraftIdentity"
+            label="Aircraft Identity"
           />
           <Input
             control={control}
@@ -314,6 +338,12 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
           <Input
             control={control}
             type="text"
+            name="crewMemberName"
+            label="Other Pilot"
+          />
+          <Input
+            control={control}
+            type="text"
             name="remarks"
             label="Remarks"
             multiline
@@ -334,26 +364,6 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
             multiline
             rows={2}
             maxRows={4}
-          />
-          <AutoComplete
-            control={control}
-            label='Pilot Type'
-            name='PilotType_id'
-            data={pilotType.data}
-            isLoading={pilotType.isLoading}
-            setOptions={(option) => ({
-              value: option.id, label: option.shortName,
-            })}
-          />
-          <AutoComplete
-            control={control}
-            label='Aircraft'
-            name='AircraftCategory_id'
-            data={aircraftCategory.data}
-            isLoading={aircraftCategory.isLoading}
-            setOptions={(option) => ({
-              value: option.id, label: option.shortName,
-            })}
           />
         </Paper>
       </>

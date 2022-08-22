@@ -72,7 +72,6 @@ const Register = () => {
             if (!data.detail) {
               reset(defaultValues);
             } else {
-              console.log(data.detail);
               toast.error(data.detail);
             }
           });

@@ -52,10 +52,11 @@ function DrawerComponent() {
         PaperProps={{ sx: { background: 'dimgrey' } }}
       >
         <LogoBox variant='h4'>
-          <img width="50px" height="50px"
+          <NavLink to="/home"><img width="300px" height="175px"
             className="d-inline-block align-top img-responsive" src={Logo} alt="logo"/>
-          {' '}
-          Pilot Logbook
+          {/* {' '}
+            Pilot Logbook */}
+          </NavLink>
         </LogoBox>
         <List>
           <ListItem onClick={() => setOpenDrawer(false)}>

@@ -92,10 +92,10 @@ const Login = () => {
             alignItems: 'center',
           }}>
           <LogoBox variant="h4">
-            <img width="35px" height="35px"
+            <img width="300px" height="175px"
               className="d-inline-block align-top img-responsive" src={Logo} alt="logo"/>
-            {' '}
-            Pilot Logbook
+            {/* {' '}
+            Pilot Logbook */}
           </LogoBox>
           <Typography variant="h5">
                 Sign In

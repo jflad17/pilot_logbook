@@ -1,5 +1,6 @@
 import React from 'react';
 import { DateTime } from 'luxon';
+import { useDeleteFlight } from '@api';
 import { Box, Button, IconButton } from '@mui/material';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -18,6 +19,7 @@ import './FlightTable.css';
  */
 
 const FlightTable = () => {
+  const deleteMutation = useDeleteFlight();
   const { data, isLoading } = useFlight();
   const [rows, setRows] = React.useState([]);
   const [open, setOpen] = React.useState(false);
@@ -68,12 +70,17 @@ const FlightTable = () => {
           setEditData(params.row);
         };
 
+        const onDeleteClick = () => {
+          const id = params.row.id;
+          deleteMutation.mutate(id);
+        };
+
         return (
           <>
             <IconButton color="success" onClick={onClick}>
               <ModeEditIcon/>
             </IconButton>
-            <IconButton color="error" onClick={onClick}>
+            <IconButton color="error" onClick={onDeleteClick}>
               <DeleteIcon/>
             </IconButton>
           </>
