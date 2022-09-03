@@ -179,3 +179,4 @@ yarn-debug.log*
 yarn-error.log*
 frontend/node_modules/
 package.json
+frontend/package.json
