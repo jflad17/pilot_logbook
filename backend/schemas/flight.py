@@ -1,6 +1,8 @@
 from typing import Optional
 from .base import Base
 from datetime import date, datetime, time
+from schemas.airport import Airport
+from schemas.aircraft import Aircraft
 from schemas.aircraft_category import AircraftCategory
 from schemas.pilot_type import PilotType
 from schemas.airline_identifier import AirlineIdentifier
@@ -8,10 +10,7 @@ from schemas.user import User
 
 class FlightBase(Base):
     date: date
-    aircraftType: str
     aircraftIdentity: str
-    fromAirport: str
-    toAirport: str
     departure: Optional[time] 
     arrival: Optional[time]
     totalFlightDuration: float
@@ -33,13 +32,19 @@ class FlightBase(Base):
     flightNumber: str
     fileName: Optional[str]
     timestamp: Optional[datetime]
-    AirlineIdentifier_id: int
+    to_Airport_id: Optional[int]
+    from_Airport_id: Optional[int]
+    Aircraft_id: int
     AircraftCategory_id: int
+    AirlineIdentifier_id: int
     PilotType_id: int
     User_id: int
 
 class Flight(FlightBase):
     id: Optional[int]
+    to_airport: Optional[Airport]
+    from_airport: Optional[Airport]
+    aircraft: Optional[Aircraft]
     airline_identifier:  Optional[AirlineIdentifier]
     aircraft_category:  Optional[AircraftCategory]
     pilot_type:  Optional[PilotType]

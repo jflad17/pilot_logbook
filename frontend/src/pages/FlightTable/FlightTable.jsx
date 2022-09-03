@@ -11,6 +11,7 @@ import Table from '@components/Table/Table';
 import EditModal from './EditModal';
 
 import './FlightTable.css';
+import { ConfirmPopup } from '../../components/Form';
 
 
 /**
@@ -23,7 +24,11 @@ const FlightTable = () => {
   const { data, isLoading } = useFlight();
   const [rows, setRows] = React.useState([]);
   const [open, setOpen] = React.useState(false);
+  const [openDelete, setOpenDelete] = React.useState(false);
+
   const [editData, setEditData] = React.useState({});
+  const [deleteID, setDeleteID] = React.useState(null);
+
   const handleClose = () => {
     setOpen(false);
     setEditData({});
@@ -44,6 +49,11 @@ const FlightTable = () => {
     }
   }, [isLoading, data]);
 
+  const onDeleteClick = (id) => {
+    if (id) {
+      deleteMutation.mutate(id);
+    }
+  };
   const columns = React.useMemo(() => [
     {
       field: 'action',
@@ -70,17 +80,15 @@ const FlightTable = () => {
           setEditData(params.row);
         };
 
-        const onDeleteClick = () => {
-          const id = params.row.id;
-          deleteMutation.mutate(id);
-        };
-
         return (
           <>
             <IconButton color="success" onClick={onClick}>
               <ModeEditIcon/>
             </IconButton>
-            <IconButton color="error" onClick={onDeleteClick}>
+            <IconButton color="error" onClick={() => {
+              setOpenDelete(true);
+              setDeleteID(params.row.id);
+            }}>
               <DeleteIcon/>
             </IconButton>
           </>
@@ -96,9 +104,36 @@ const FlightTable = () => {
       },
     },
     {
-      headerName: 'Type',
-      field: 'aircraftType',
+      headerName: 'Airline',
+      field: 'airline_identifier',
       width: 150,
+      renderCell: (params) => {
+        return <div className='rowitem'>{params.row.airline_identifier.name}</div>;
+      },
+    },
+    {
+      headerName: 'Aircraft',
+      field: 'aircraft',
+      width: 150,
+      renderCell: (params) => {
+        return <div className="rowitem">{params.row.aircraft.name}</div>;
+      },
+    },
+    {
+      headerName: 'Aircraft Category',
+      field: 'aircraft_category',
+      width: 150,
+      renderCell: (params) => {
+        return <div className="rowitem">{params.row.aircraft_category.shortName}</div>;
+      },
+    },
+    {
+      headerName: 'Pilot Type',
+      field: 'pilot_type',
+      width: 150,
+      renderCell: (params) => {
+        return <div className='rowitem'>{params.row.pilot_type.shortName}</div>;
+      },
     },
     {
       headerName: 'Tail',
@@ -107,13 +142,19 @@ const FlightTable = () => {
     },
     {
       headerName: 'From',
-      field: 'fromAirport',
+      field: 'from_airport',
       width: 150,
+      renderCell: (params) => {
+        return <div className='rowitem'>{params.row.from_airport.code}</div>;
+      },
     },
     {
       headerName: 'To',
-      field: 'toAirport',
+      field: 'to_airport',
       width: 150,
+      renderCell: (params) => {
+        return <div className='rowitem'>{params.row.to_airport.code}</div>;
+      },
     },
     {
       headerName: 'Total Flight Duration',
@@ -200,30 +241,6 @@ const FlightTable = () => {
       field: 'flightNumber',
       width: 150,
     },
-    {
-      headerName: 'Aircraft Category',
-      field: 'aircraft_category',
-      width: 150,
-      renderCell: (params) => {
-        return <div className="rowitem">{params.row.aircraft_category.shortName}</div>;
-      },
-    },
-    {
-      headerName: 'Pilot Type',
-      field: 'pilot_type',
-      width: 150,
-      renderCell: (params) => {
-        return <div className='rowitem'>{params.row.pilot_type.shortName}</div>;
-      },
-    },
-    {
-      headerName: 'Airline',
-      field: 'airline_identifier',
-      width: 150,
-      renderCell: (params) => {
-        return <div className='rowitem'>{params.row.airline_identifier.name}</div>;
-      },
-    },
   ], []);
 
 
@@ -239,6 +256,12 @@ const FlightTable = () => {
       </Box>
 
       <EditModal open={open} editData={editData} handleClose={handleClose} handleOpen={handleOpen} />
+      <ConfirmPopup
+        handleClose={() => setOpenDelete(false)}
+        message={'Are you sure you want to delete?'}
+        open={openDelete}
+        onConfirm={() => onDeleteClick(deleteID)}
+      />
     </>
   );
 };

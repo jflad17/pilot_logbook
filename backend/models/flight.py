@@ -11,17 +11,12 @@ from sqlalchemy import (
     func,
 )
 from sqlalchemy.orm import relationship
-
 from db.base import Base
-
 
 class Flight(Base):
     id = Column(Integer, primary_key=True)
     date = Column(DATE, nullable=False)
-    aircraftType = Column(VARCHAR(10), nullable=False)
     aircraftIdentity = Column(VARCHAR(9), nullable=False)
-    fromAirport = Column(VARCHAR(3), nullable=False)
-    toAirport = Column(VARCHAR(3), nullable=False)
     departure = Column(TIME)
     arrival = Column(TIME)
     totalFlightDuration = Column(DECIMAL(6, 2), nullable=False)
@@ -47,21 +42,22 @@ class Flight(Base):
         nullable=False,
         server_default=func.now()
     )
-    AirlineIdentifier_id = Column(
-        Integer, ForeignKey("AirlineIdentifier.id"), nullable=False
-    )
-
+    to_Airport_id = Column(Integer, ForeignKey("Airport.id"), nullable=False)
+    from_Airport_id = Column(Integer, ForeignKey("Airport.id"), nullable=False)
+    Aircraft_id = Column(Integer, ForeignKey("Aircraft.id"), nullable=False)
     AircraftCategory_id = Column(
         Integer, ForeignKey("AircraftCategory.id"), nullable=False
+    )
+    AirlineIdentifier_id = Column(
+        Integer, ForeignKey("AirlineIdentifier.id"), nullable=False
     )
     PilotType_id = Column(Integer, ForeignKey("PilotType.id"), nullable=False)
     User_id = Column(Integer, ForeignKey("User.id"), nullable=False)
 
-    airline_identifier = relationship(
-        "AirlineIdentifier", lazy="joined"
-    )
-    aircraft_category = relationship(
-        "AircraftCategory", lazy="joined"
-    )
+    to_airport = relationship("Airport", foreign_keys=to_Airport_id, lazy="joined")
+    from_airport = relationship("Airport", foreign_keys=from_Airport_id, lazy="joined")
+    aircraft = relationship("Aircraft", lazy="joined")
+    aircraft_category = relationship("AircraftCategory", lazy="joined")
+    airline_identifier = relationship("AirlineIdentifier", lazy="joined")
     pilot_type = relationship("PilotType", lazy="joined")
     user = relationship("User", lazy="joined")

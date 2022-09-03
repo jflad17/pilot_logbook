@@ -17,6 +17,8 @@ import { Paper, Button } from '@mui/material';
 
 import
 {
+  useAirport,
+  useAircraft,
   useAircraftCategory,
   useAirlineIdentifier,
   usePilotType,
@@ -37,6 +39,8 @@ import { fetchUser } from '../../Auth';
  */
 
 const EditModal = ({ open, handleClose, handleOpen, editData }) => {
+  const airport = useAirport();
+  const aircraft = useAircraft();
   const aircraftCategory = useAircraftCategory();
   const airlineIdentifier = useAirlineIdentifier();
   const pilotType = usePilotType();
@@ -47,10 +51,7 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
   const defaultValues = React.useMemo(() => {
     return {
       date: '',
-      aircraftType: '',
       aircraftIdentity: '',
-      fromAirport: '',
-      toAirport: '',
       departure: '',
       arrival: '',
       totalFlightDuration: '',
@@ -70,6 +71,9 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
       approachType: '',
       crewMemberName: '',
       flightNumber: '',
+      to_Airport_id: '',
+      from_Airport_id: '',
+      Aircraft_id: '',
       AirlineIdentifier_id: '',
       AircraftCategory_id: '',
       PilotType_id: '',
@@ -78,10 +82,7 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
 
   const validationSchema = object().shape({
     date: date().required(),
-    aircraftType: string().required(),
     aircraftIdentity: string().required(),
-    fromAirport: string().required(),
-    toAirport: string().required(),
     departure: string().required(),
     arrival: string().required(),
     totalFlightDuration: number().required().test(
@@ -119,8 +120,11 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
     approachType: string().nullable(),
     crewMemberName: string().nullable(),
     flightNumber: string().required(),
-    AirlineIdentifier_id: number().required('Airline required'),
+    to_Airport_id: number().required('To Airport required'),
+    from_Airport_id: number().required('From Airport required'),
+    Aircraft_id: number().required('Aircraft required'),
     AircraftCategory_id: number().required('Aircraft required'),
+    AirlineIdentifier_id: number().required('Airline required'),
     PilotType_id: number().required('Pilot Type required'),
   });
 
@@ -144,7 +148,9 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
     } else {
       if (open && Object.keys(editData).length > 0) {
         mapValues(editData, (value, key) => {
-          setValue(key, value);
+          if (key in defaultValues) {
+            setValue(key, value);
+          }
         });
       }
     }
@@ -167,7 +173,7 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
     console.log('errors', errors);
     data.date = DateTime.fromJSDate(data.date).toFormat('yyyy-MM-dd');
     data.User_id = fetchUser().id;
-    if (editData.length > 0) {
+    if (Object.keys(editData).length > 0) {
       data.id = editData.id;
       updateFlightMutation.mutate(data);
       handleClose();
@@ -181,6 +187,12 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
     return (
       <>
         <Paper>
+          <Datepicker
+            control={control}
+            label='Date'
+            name="date"
+            defaultValue={!editData ? format(new Date(), 'MM/dd/yyyy') : null}
+          />
           <AutoComplete
             control={control}
             label='Airline'
@@ -204,6 +216,16 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
           <AutoComplete
             control={control}
             label='Aircraft'
+            name='Aircraft_id'
+            data={aircraft.data}
+            isLoading={aircraft.isLoading}
+            setOptions={(option) => ({
+              value: option.id, label: option.name,
+            })}
+          />
+          <AutoComplete
+            control={control}
+            label='Aircraft Category'
             name='AircraftCategory_id'
             data={aircraftCategory.data}
             isLoading={aircraftCategory.isLoading}
@@ -211,35 +233,33 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
               value: option.id, label: option.shortName,
             })}
           />
-          <Datepicker
+          <AutoComplete
             control={control}
-            label='Date'
-            name="date"
-            defaultValue={!editData ? format(new Date(), 'MM/dd/yyyy') : null}
+            label='From Airport'
+            name='from_Airport_id'
+            data={airport.data}
+            isLoading={airport.isLoading}
+            setOptions={(option) => ({
+              value: option.id, label: option.code,
+            })}
+            allowCreate={true}
           />
-          <Input
+          <AutoComplete
             control={control}
-            type="text"
-            name="aircraftType"
-            label="Aircraft Type"
+            label='To Airport'
+            name='to_Airport_id'
+            data={airport.data}
+            isLoading={airport.isLoading}
+            setOptions={(option) => ({
+              value: option.id, label: option.code,
+            })}
+            allowCreate={true}
           />
           <Input
             control={control}
             type="text"
             name="aircraftIdentity"
             label="Aircraft Identity"
-          />
-          <Input
-            control={control}
-            type="text"
-            name="fromAirport"
-            label="From Airport"
-          />
-          <Input
-            control={control}
-            type="text"
-            name="toAirport"
-            label="To Airport"
           />
           <Input
             control={control}
@@ -339,7 +359,7 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
             control={control}
             type="text"
             name="crewMemberName"
-            label="Other Pilot"
+            label="Co-Pilot"
           />
           <Input
             control={control}

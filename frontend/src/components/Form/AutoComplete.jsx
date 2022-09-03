@@ -1,4 +1,5 @@
 import React from 'react';
+import escapeRegExp from 'lodash/escapeRegExp';
 import { default as ReactSelect } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { Controller, useForm, useFormContext } from 'react-hook-form';
@@ -10,7 +11,7 @@ import PropTypes from 'prop-types';
  * @return {JSX}
  */
 function AutoComplete({
-  defaultValue, label, name, data, isLoading, setOptions, onChange=null, isMulti=false,
+  defaultValue, label, name, data, isLoading, setOptions, allowCreate=false, onChange=null, isMulti=false,
   renderOption=null, control=null, width=null, ...props
 }) {
   const [inputValue, setInputValue] = React.useState('');
@@ -112,6 +113,7 @@ function AutoComplete({
           return (
             <div className="position-relative" style={style}>
               <SelectControl
+                allowCreate={allowCreate}
                 styles={customStyles(Boolean(fieldState.error))}
                 isLoading={isLoading}
                 isClearable={false}
@@ -129,7 +131,7 @@ function AutoComplete({
                   if (onChange) onChange(value || '');
                 }}
                 onInputChange={(value) => setInputValue(value)}
-                options={filteredOptions(_options, inputValue).slice(0, 10)}
+                options={filteredOptions(_options, inputValue)}
                 formatOptionLabel={formatOptionLabel}
                 className={'react-select-container'}
                 placeholder={isLoading ? 'Loading...' : label || ''}
@@ -185,6 +187,7 @@ const filteredOptions = (options, inputValue) => {
       }
     }
   }
+  console.log('matchstart', matchByStart);
 
   return [...matchByStart, ...matchByInclusion];
 };
@@ -204,6 +207,7 @@ AutoComplete.propTypes = {
   defaultValue: PropTypes.any,
   isMulti: PropTypes.bool,
   onChange: PropTypes.any,
+  allowCreate: PropTypes.bool,
 };
 
 SelectControl.propTypes = {
