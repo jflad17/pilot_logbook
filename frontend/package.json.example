@@ -38,6 +38,16 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject"
+    "react-table": "^7.7.0",
+    "react-toastify": "^8.2.0",
+    "react-window": "^1.8.7",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject",
   },
   "eslintConfig": {
     "extends": [
