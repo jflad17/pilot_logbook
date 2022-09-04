@@ -26,18 +26,7 @@
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",
     "react-select": "^5.4.0",
-    "react-table": "^7.7.0",
-    "react-toastify": "^8.2.0",
-    "react-window": "^1.8.7",
-    "web-vitals": "^2.1.4",
-    "yup": "^0.32.11"
-  },
-  "scripts": {
-    "start": "react-app-rewired start",
-    "develop": "env-cmd -f .env.development react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
-    "eject": "react-app-rewired eject"
+    "yup": "^0.32.11",
     "react-table": "^7.7.0",
     "react-toastify": "^8.2.0",
     "react-window": "^1.8.7",
@@ -45,9 +34,10 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
+    "develop": "env-cmd -f .env.development react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-app-rewired eject",
+    "eject": "react-app-rewired eject"
   },
   "eslintConfig": {
     "extends": [

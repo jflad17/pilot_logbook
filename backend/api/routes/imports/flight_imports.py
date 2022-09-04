@@ -55,14 +55,14 @@ def skywest(
             to_Airport_id = None
             fromAirport = row["Origin"]
             toAirport = row["Dest"]
-            if toAirport in airport_list:
+            if toAirport in [x[1] for x in airport_list]:
                 to_Airport_id = [x[0] for x in airport_list if x[1] == toAirport][0]
             else:
                 result = db.execute(insert(models.Airport).values(code=toAirport))
                 to_Airport_id = result.lastrowid
                 airport_list.append((to_Airport_id, toAirport))
                 message_list.append([toAirport + " was added to Airport table!", "success"])
-            if fromAirport in airport_list:
+            if fromAirport in [x[1] for x in airport_list]:
                 from_Airport_id = [x[0] for x in airport_list if x[1] == fromAirport][0]
             else:
                 result = db.execute(insert(models.Airport).values(code=fromAirport))

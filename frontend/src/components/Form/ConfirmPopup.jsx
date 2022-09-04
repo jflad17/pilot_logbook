@@ -39,7 +39,7 @@ function ConfirmPopup({ open, message, handleClose, onConfirm }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleNo} autoFocus>No</Button>
-          <Button onClick={handleYes()}>
+          <Button onClick={handleYes}>
             Yes
           </Button>
         </DialogActions>

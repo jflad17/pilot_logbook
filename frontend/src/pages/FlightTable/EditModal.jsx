@@ -199,9 +199,10 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
             name='AirlineIdentifier_id'
             data={airlineIdentifier.data}
             isLoading={airlineIdentifier.isLoading}
-            setOptions={(option) => ({
-              value: option.id, label: option.name,
-            })}
+            // setOptions={(option) => ({
+            //   value: option.id, label: option.name,
+            // })}
+            getOptionLabel={(option) => option.name}
           />
           <AutoComplete
             control={control}
@@ -209,9 +210,10 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
             name='PilotType_id'
             data={pilotType.data}
             isLoading={pilotType.isLoading}
-            setOptions={(option) => ({
-              value: option.id, label: option.shortName,
-            })}
+            // setOptions={(option) => ({
+            //   value: option.id, label: option.shortName,
+            // })}
+            getOptionLabel={(option) => option.shortName}
           />
           <AutoComplete
             control={control}
@@ -219,9 +221,10 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
             name='Aircraft_id'
             data={aircraft.data}
             isLoading={aircraft.isLoading}
-            setOptions={(option) => ({
-              value: option.id, label: option.name,
-            })}
+            // setOptions={(option) => ({
+            //   value: option.id, label: option.name,
+            // })}
+            getOptionLabel={(option) => option.name}
           />
           <AutoComplete
             control={control}
@@ -229,9 +232,10 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
             name='AircraftCategory_id'
             data={aircraftCategory.data}
             isLoading={aircraftCategory.isLoading}
-            setOptions={(option) => ({
-              value: option.id, label: option.shortName,
-            })}
+            // setOptions={(option) => ({
+            //   value: option.id, label: option.shortName,
+            // })}
+            getOptionLabel={(option) => option.shortName}
           />
           <AutoComplete
             control={control}
@@ -239,10 +243,11 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
             name='from_Airport_id'
             data={airport.data}
             isLoading={airport.isLoading}
-            setOptions={(option) => ({
-              value: option.id, label: option.code,
-            })}
-            allowCreate={true}
+            // setOptions={(option) => ({
+            //   value: option.id, label: option.code,
+            // })}
+            getOptionLabel={(option) => option.code}
+            // allowCreate={true}
           />
           <AutoComplete
             control={control}
@@ -250,10 +255,11 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
             name='to_Airport_id'
             data={airport.data}
             isLoading={airport.isLoading}
-            setOptions={(option) => ({
-              value: option.id, label: option.code,
-            })}
-            allowCreate={true}
+            // setOptions={(option) => ({
+            //   value: option.id, label: option.code,
+            // })}
+            getOptionLabel={(option) => option.code}
+            // allowCreate={true}
           />
           <Input
             control={control}

@@ -11,7 +11,7 @@ import Table from '@components/Table/Table';
 import EditModal from './EditModal';
 
 import './FlightTable.css';
-import { ConfirmPopup } from '../../components/Form';
+import { ConfirmPopup } from '@components/Form';
 
 
 /**
@@ -85,7 +85,8 @@ const FlightTable = () => {
             <IconButton color="success" onClick={onClick}>
               <ModeEditIcon/>
             </IconButton>
-            <IconButton color="error" onClick={() => {
+            <IconButton color="error" onClick={(e) => {
+              e.stopPropagation();
               setOpenDelete(true);
               setDeleteID(params.row.id);
             }}>
