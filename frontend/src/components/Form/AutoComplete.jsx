@@ -1,16 +1,17 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import PropTypes from 'prop-types';
-import { Autocomplete, TextField } from '@mui/material';
+import { Autocomplete, TextField, createFilterOptions } from '@mui/material';
 
+const filter = createFilterOptions();
 /**
  * AutoComplete Component
  * @param {props} props props
  * @return {JSX}
  */
 function AutoComplete({
-  defaultValue, label, name, data, isLoading, getOptionLabel,
-  renderOption=null, control=null, width=null, ...props
+  defaultValue, label, name, data, isLoading, getOptionLabel=null, inputName=null,
+  control=null, width=null, ...props
 }) {
   const _form = useFormContext();
   // const idValue = React.useState(null);
@@ -31,13 +32,36 @@ function AutoComplete({
             // id={name}
             // value={value}
             isOptionEqualToValue={(option, value) => {
-              // console.log('option', option);
-              // console.log('value', value);
-              return (option && value) ? option.id === value.id : false;
+              console.log('option', option);
+              console.log('value', value);
+              return (option && value) ? option.id === value.id || value.id === null : false;
+            }}
+            filterOptions={(options, params) => {
+              const filtered = filter(options, params);
+              const { inputValue } = params;
+              const isExisting = options.some((option) => inputValue === option[inputName]);
+              if (inputValue !== '' && !isExisting) {
+                const newInput = { inputValue };
+                // newInput['inputValue'] = `Add "${inputValue}"`;
+                newInput[inputName] = `Add "${inputValue}"`;
+                newInput['id'] = null;
+                filtered.push(newInput);
+              }
+              return filtered;
             }}
             options={data}
-            getOptionLabel={getOptionLabel}
-            renderOption={renderOption}
+            getOptionLabel={(option) => {
+              if (typeof option === 'string') {
+                console.log('STRING');
+                return option;
+              }
+              if (option.inputValue) {
+                console.log('inputval');
+                return option.inputValue;
+              }
+              console.log('INPUTNAME');
+              return option[inputName];
+            }}
             // getOptionSelected={(option, value) => value === undefined || value === '' || option.id === value.id}
             renderInput={(params) => (
               <TextField
@@ -54,8 +78,14 @@ function AutoComplete({
               />
             )}
             onChange={(e, data) => {
-              // console.log('onchange', data);
-              return innerprops.field.onChange(data ? data.id : {});
+              if (typeof data === 'string') {
+                return data;
+              } else if (data && data.inputValue) {
+                return data.inputValue;
+              } else {
+                console.log('test', data);
+                return innerprops.field.onChange(data ? data.id : {});
+              }
             }}
             // value={value}
             sx={{
@@ -92,4 +122,5 @@ AutoComplete.propTypes = {
   renderOption: PropTypes.func,
   getOptionLabel: PropTypes.func,
   defaultValue: PropTypes.any,
+  inputName: PropTypes.any,
 };

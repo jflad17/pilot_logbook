@@ -13,15 +13,17 @@ import
 } from 'yup';
 import { format } from 'date-fns';
 import mapValues from 'lodash/mapValues';
-import { Paper, Button } from '@mui/material';
+import { Paper, Button,
+  // createFilterOptions,
+} from '@mui/material';
 
 import
 {
   useAirport,
-  useAircraft,
-  useAircraftCategory,
-  useAirlineIdentifier,
-  usePilotType,
+  // useAircraft,
+  // useAircraftCategory,
+  // useAirlineIdentifier,
+  // usePilotType,
   useCreateFlight,
   useUpdateFlight,
 } from '@api';
@@ -40,10 +42,10 @@ import { fetchUser } from '../../Auth';
 
 const EditModal = ({ open, handleClose, handleOpen, editData }) => {
   const airport = useAirport();
-  const aircraft = useAircraft();
-  const aircraftCategory = useAircraftCategory();
-  const airlineIdentifier = useAirlineIdentifier();
-  const pilotType = usePilotType();
+  // const aircraft = useAircraft();
+  // const aircraftCategory = useAircraftCategory();
+  // const airlineIdentifier = useAirlineIdentifier();
+  // const pilotType = usePilotType();
 
   const createFlightMutation = useCreateFlight();
   const updateFlightMutation = useUpdateFlight();
@@ -193,7 +195,7 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
             name="date"
             defaultValue={!editData ? format(new Date(), 'MM/dd/yyyy') : null}
           />
-          <AutoComplete
+          {/* <AutoComplete
             control={control}
             label='Airline'
             name='AirlineIdentifier_id'
@@ -236,20 +238,30 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
             //   value: option.id, label: option.shortName,
             // })}
             getOptionLabel={(option) => option.shortName}
-          />
+          /> */}
           <AutoComplete
             control={control}
             label='From Airport'
             name='from_Airport_id'
             data={airport.data}
             isLoading={airport.isLoading}
+            inputName={'code'}
             // setOptions={(option) => ({
             //   value: option.id, label: option.code,
             // })}
-            getOptionLabel={(option) => option.code}
+            // getOptionLabel={(option) => option.code}
             // allowCreate={true}
+            // filterOptions={(options, params) => {
+            //   const filter = createFilterOptions(options, params);
+            //   const { inputValue }= params;
+            //   const isExisting = options.some((option) => inputValue === option.code);
+            //   if (inputValue !== '' && !isExisting) {
+            //     filter.push({ inputValue, title: `Add "${inputValue}"` });
+            //   }
+            //   return filter;
+            // }}
           />
-          <AutoComplete
+          {/* <AutoComplete
             control={control}
             label='To Airport'
             name='to_Airport_id'
@@ -260,7 +272,7 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
             // })}
             getOptionLabel={(option) => option.code}
             // allowCreate={true}
-          />
+          /> */}
           <Input
             control={control}
             type="text"

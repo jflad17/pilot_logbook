@@ -42,7 +42,7 @@ const FlightTable = () => {
   React.useEffect(() => {
     if (isLoading === false) {
       const newRows = [];
-      for (const d of data) {
+      for (const d of data.sort((a, b) => new Date(b.date) - new Date(a.date))) {
         newRows.push({ id: d.id, ...d });
       }
       setRows([...newRows]);
