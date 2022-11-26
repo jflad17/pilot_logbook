@@ -23,7 +23,7 @@ const NavLink = styled(Link)(({ theme }) => ({
   'textDecoration': 'none',
   'color': 'white',
   'fontSize': '20px',
-  'marginRight': theme.spacing(20),
+  'paddingRight': theme.spacing(20),
   '&:hover': {
     color: 'lightblue',
     borderBottom: '1px solid white',
@@ -47,6 +47,7 @@ function DrawerComponent() {
         <MenuIcon />
       </IconButton>
       <Drawer
+        style={{ width: '220px' }}
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
         PaperProps={{ sx: { background: 'dimgrey' } }}
@@ -72,6 +73,11 @@ function DrawerComponent() {
           <ListItem onClick={() => setOpenDrawer(false)}>
             <ListItemText>
               <NavLink to="/flight-table">Flight Table</NavLink>
+            </ListItemText>
+          </ListItem>
+          <ListItem onClick={() => setOpenDrawer(false)}>
+            <ListItemText>
+              <NavLink to="/reports">Reports</NavLink>
             </ListItemText>
           </ListItem>
           <ListItem onClick={() => setOpenDrawer(false)}>

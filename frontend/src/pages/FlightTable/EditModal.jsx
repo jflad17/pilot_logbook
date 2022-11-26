@@ -148,7 +148,9 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
     if (Object.keys(editData).length === 0) {
       reset(defaultValues);
     } else {
+      console.log('open', open);
       if (open && Object.keys(editData).length > 0) {
+        console.log('editdata open', editData);
         mapValues(editData, (value, key) => {
           if (key in defaultValues) {
             setValue(key, value);

@@ -43,7 +43,8 @@ const LogoBox = styled(Typography)({
 function Navbar() {
   // const classes = useStyles();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  // const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <>
@@ -58,7 +59,7 @@ function Navbar() {
             </NavLink>
           </LogoBox>
           {isMobile ? (
-            <Drawer/>
+            <Drawer />
           ) : (
           <NavLinks>
             <NavLink to="/home">
@@ -69,6 +70,9 @@ function Navbar() {
             </NavLink>
             <NavLink to="/flight-table">
                 Flight Table
+            </NavLink>
+            <NavLink to="/reports">
+                Reports
             </NavLink>
             <NavLink to="/register">
                 Register
