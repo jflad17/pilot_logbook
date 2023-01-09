@@ -37,6 +37,10 @@ import {
   useAirport,
 } from './airport';
 
+import {
+  useReport,
+} from './report';
+
 export {
   useAirport,
   useAircraft,
@@ -59,4 +63,5 @@ export {
   useCreatePilotType,
   useDeletePilotType,
   useUpdatePilotType,
+  useReport,
 };

@@ -9,7 +9,7 @@ import FlightTable from '@pages/FlightTable/FlightTable';
 import Login from '@pages/Login/Login';
 import Register from '@pages/Register/Register';
 import Home from '@pages/Home/Home';
-import Reports from './pages/Reports/Reports';
+import Reports from '@pages/Reports/Reports';
 
 /**
  * Routes for all page components
