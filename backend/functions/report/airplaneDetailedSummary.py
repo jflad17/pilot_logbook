@@ -36,7 +36,7 @@ def Header(canvas, doc, start, end):
 
     canvas.restoreState()
 
-def AirplaneSummaryPDF(db, start, end, **kwargs):
+def AirplaneDetailedSummaryPDF(db, start, end, **kwargs):
   summary_top_list = [
     [
       "AIRMAN NAME",
@@ -149,7 +149,7 @@ def AirplaneSummaryPDF(db, start, end, **kwargs):
   pdf = buffer.getvalue()
   buffer.close()
 
-  fileName = f"AirplaneSummary-{datetime.now().strftime('%Y-%m-%d')}.pdf"
+  fileName = f"AirplaneDetailedSummary-{datetime.now().strftime('%Y-%m-%d')}.pdf"
   response = Response(pdf, media_type="application/pdf")
   response.headers["Content-Disposition"] = "attachment; filename= " + fileName + ""
   

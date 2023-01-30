@@ -74,11 +74,11 @@ def skywest(
             hours = int(hours) + round((int(minutes) / 60), 4)
             captain = row["Captain"]
             first_officer = row["First Officer"]
-            crewMemberName = captain
-            pilot_type_id = captain_id
+            crewMemberName = first_officer
+            pilot_type_id = first_officer_id
             if name in captain:
-                crewMemberName = first_officer
-                pilot_type_id = first_officer_id
+                crewMemberName = captain
+                pilot_type_id = captain_id
             aircraft_type = row["A/C Type"]
             aircraft_id = None
             for id, shortName in aircraft_ids:
@@ -112,7 +112,7 @@ def skywest(
             )
         if data_list:
             try:
-                db.execute(insert(models.Flight).values(data_list))
+                db.execute(insert(models.Flight, ).values(data_list).prefix_with('IGNORE'))
                 db.commit()
                 message_list.append([file.filename + " Uploaded Successfully!", 'success'])
             except Exception as err:

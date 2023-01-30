@@ -1,3 +1,5 @@
+import axios from 'axios';
+import { toast } from 'react-toastify';
 import React from 'react';
 import {
   // Box,
@@ -6,7 +8,7 @@ import {
   Grid,
   // TextField
 } from '@mui/material';
-import { Document, Page, Text, View, StyleSheet, PDFViewer } from '@react-pdf/renderer';
+// import { Document, Page, Text, View, StyleSheet, PDFViewer } from '@react-pdf/renderer';
 import { AutoComplete } from '@components';
 import { useReport } from '@api';
 /**
@@ -17,34 +19,68 @@ import { useReport } from '@api';
 const Reports = () => {
   const reports = useReport();
   const [reportName, setReportName] = React.useState(null);
-  React.useEffect(() => {
-    console.log(reportName);
-  }, []);
+  // React.useEffect(() => {
+  //   console.log(reportName);
+  // }, []);
 
-  const styles = StyleSheet.create({
-    page: {
-      flexDirection: 'row',
-      backgroundColor: '#C0C0C0',
-    },
-    section: {
-      margin: 10,
-      padding: 10,
-      flexGrow: 1,
-    },
-  });
+  const onViewClick = async (e) => {
+    const file = {};
+    let response = {};
+    let object = null;
+    if (reportName != null) {
+      try {
+        response = await axios(`/report/${reportName}/`, {
+          method: 'POST',
+          responseType: 'arraybuffer',
+          data: {},
+        });
+      } catch (error) {
+        toast.error('Error Generating Report');
+        console.log(error);
+      };
+      file.response = response;
+      file.data = response.data;
+      file.blob = new Blob([response.data], { type: 'application/pdf' });
+      file.url = URL.createObjectURL(file.blob);
+      const contentDis = response.headers['content-disposition'];
+      if (contentDis) {
+        file.name = contentDis.split('=')[1].trim().replace('"', '');
+      }
+      document.querySelector('#pdfReport').innerHTML = '';
+      object = document.createElement('object');
+      object.setAttribute('width', '100%');
+      object.setAttribute('height', '100%');
+      document.querySelector('#pdfReport').appendChild(object);
+      object.setAttribute('data', file.url);
+    } else {
+      toast.error('No Report Selected!');
+    }
+  };
 
-  const MyPdf = () => (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <Text>Heading #1</Text>
-        </View>
-        <View style={styles.section}>
-          <Text>Heading #2</Text>
-        </View>
-      </Page>
-    </Document>
-  );
+  // const styles = StyleSheet.create({
+  //   page: {
+  //     flexDirection: 'row',
+  //     backgroundColor: '#C0C0C0',
+  //   },
+  //   section: {
+  //     margin: 10,
+  //     padding: 10,
+  //     flexGrow: 1,
+  //   },
+  // });
+
+  // const MyPdf = () => (
+  //   <Document>
+  //     <Page size="A4" style={styles.page}>
+  //       <View style={styles.section}>
+  //         <Text>Heading #1</Text>
+  //       </View>
+  //       <View style={styles.section}>
+  //         <Text>Heading #2</Text>
+  //       </View>
+  //     </Page>
+  //   </Document>
+  // );
 
   return (
     <>
@@ -83,16 +119,21 @@ const Reports = () => {
 
               // disabled
             />
-            <Button variant="contained" color="primary">View</Button>
+            <Button variant="contained" color="primary" onClick={onViewClick}>View</Button>
           </Grid>
         </center>
         {/* </center>
           </Box> */}
         {/* <TextField /> */}
         <center>
-          <PDFViewer width={500} height={500}>
+          {/* <PDFViewer minWidth={375} width={'100%'} minHeight={500} height={650}>
             <MyPdf />
-          </PDFViewer>
+          </PDFViewer> */}
+          <div id='pdfReport' style={{
+            minWidth: '300px',
+            height: '500px',
+          }}>
+          </div>
         </center>
       </Paper>
     </>

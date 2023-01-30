@@ -9,6 +9,7 @@ from sqlalchemy import (
     TIMESTAMP,
     TIME,
     func,
+    UniqueConstraint,
 )
 from sqlalchemy.orm import relationship
 from db.base import Base
@@ -35,7 +36,7 @@ class Flight(Base):
     approaches = Column(Integer)
     approachType = Column(VARCHAR(255))
     crewMemberName = Column(VARCHAR(100))
-    flightNumber = Column(VARCHAR(4), nullable=False)
+    flightNumber = Column(VARCHAR(6), nullable=False)
     fileName  = Column(VARCHAR(50))
     timestamp = Column(
         TIMESTAMP,
@@ -53,6 +54,7 @@ class Flight(Base):
     )
     PilotType_id = Column(Integer, ForeignKey("PilotType.id"), nullable=False)
     User_id = Column(Integer, ForeignKey("User.id"), nullable=False)
+    __table_args__ = (UniqueConstraint(date, departure, arrival, totalFlightDuration),)
 
     to_airport = relationship("Airport", foreign_keys=to_Airport_id, lazy="joined")
     from_airport = relationship("Airport", foreign_keys=from_Airport_id, lazy="joined")

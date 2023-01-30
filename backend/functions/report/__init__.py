@@ -1,1 +1,2 @@
-from .summary import AirplaneSummaryPDF
+from .airplaneDetailedSummary import AirplaneDetailedSummaryPDF
+from .airplaneSummary import AirplaneSummaryPDF

@@ -2,7 +2,7 @@ import React from 'react';
 import { DateTime } from 'luxon';
 import { useDeleteFlight } from '@api';
 import { Box,
-  // Button,
+  Button,
   IconButton,
 } from '@mui/material';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
@@ -130,10 +130,10 @@ const FlightTable = () => {
   //   setEditData({});
   // };
 
-  // const onAddClick = () => {
-  //   setEditData({});
-  //   setOpenEdit(true);
-  // };
+  const onAddClick = () => {
+    setEditData({});
+    setOpenEdit(true);
+  };
   const columns = React.useMemo(() => [
     {
       field: 'action',
@@ -343,8 +343,8 @@ const FlightTable = () => {
         <Box
           className='flight-table-bg'>
           <center><h1>Flight Table</h1></center>
-          {/* <Button variant="contained" color="primary" onClick={onAddClick}>Add</Button>
-          <Button variant="contained" color="success" onClick={onEditClick}
+          <Button variant="contained" color="primary" onClick={onAddClick}>Add</Button>
+          {/* <Button variant="contained" color="success" onClick={onEditClick}
             disabled={Object.keys(editData).length === 0}>Edit</Button>
           <Button variant="contained" color="error" onClick={onDeleteToggle}
             disabled={Object.keys(editData).length === 0}>Delete</Button>
