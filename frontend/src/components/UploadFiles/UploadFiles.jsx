@@ -26,36 +26,42 @@ function UploadFiles({ title }) {
   // const [fileInfos, setFileInfos] = React.useState([]);
 
   const uploadFiles = async () => {
-    if (airline.includes('SkyWest')) {
-      const formData = new FormData();
-      for (const a of accepted) {
-        formData.append('files', a);
-      }
-      formData.append('User_id', fetchUser().id);
-      formData.append('airline', airline);
-      formData.append('name', name);
-      await axios.post('/imports/skywest/',
-          formData, { headers: { 'Content-Type': 'multipart/form-data' } })
-          .then((response) => {
-            for (const [d, t] of response.data) {
-              switch (t) {
-                case 'success':
-                  toast.success(d);
-                  break;
-                case 'warning':
-                  toast.warning(d);
-                  break;
-                case 'error':
-                  toast.error(d);
-                  break;
-              }
-            }
-            clear();
-          }).catch((error) => {
-            toast.error('Error uploading files');
-            throw error;
-          });
+    let url = '';
+    if (airline.includes('North Dakota')) {
+
+    } else if (airline.includes('SkyWest')) {
+      url = '/imports/skywest';
+    } else if (airline.includes('Delta')) {
+
     }
+    const formData = new FormData();
+    for (const a of accepted) {
+      formData.append('files', a);
+    }
+    formData.append('User_id', fetchUser().id);
+    formData.append('airline', airline);
+    formData.append('name', name);
+    await axios.post(url,
+        formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+        .then((response) => {
+          for (const [d, t] of response.data) {
+            switch (t) {
+              case 'success':
+                toast.success(d);
+                break;
+              case 'warning':
+                toast.warning(d);
+                break;
+              case 'error':
+                toast.error(d);
+                break;
+            }
+          }
+          clear();
+        }).catch((error) => {
+          toast.error('Error uploading files');
+          throw error;
+        });
   };
 
   const acceptedFiles = accepted.map((file) => {
@@ -112,14 +118,14 @@ function UploadFiles({ title }) {
                 setAirline(data ? data.name: null);
               }}
               defaultValue={airline}
-              disabled
+              // disabled
             />
             <TextField
               required
               label="Pilot"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              disabled
+              // disabled
             />
           </Box>
         </center>
