@@ -25,6 +25,7 @@ class Flight(Base):
     nightLanding = Column(Integer)
     actualInstrument = Column(DECIMAL(6, 2))
     simulatedInstrumentUnderHood = Column(DECIMAL(6, 2))
+    atd= Column(DECIMAL(6,2), comment="UND")
     atdInstrument = Column(DECIMAL(6,2), comment="UND")
     hold = Column(Boolean, default=False, nullable=False)
     fullFlightSim = Column(DECIMAL(6, 2))

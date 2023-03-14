@@ -19,6 +19,7 @@ class FlightBase(Base):
     actualInstrument: Optional[float]
     simulatedInstrumentUnderHood:  Optional[float]
     atdInstrument: Optional[float]
+    atd: Optional[float]
     hold: Optional[bool]
     fullFlightSim: Optional[float]
     groundTrainer: Optional[float]

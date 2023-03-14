@@ -5,3 +5,5 @@ class Aircraft(Base):
     id: int
     shortName: str
     name: str
+    brand: str | None
+    model: str | None
