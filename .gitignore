@@ -181,3 +181,5 @@ frontend/node_modules/
 package.json
 frontend/package.json
 frontend/.env.development
+.vscode/launch.json
+pilot_logbook.code-workspace
