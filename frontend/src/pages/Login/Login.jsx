@@ -123,7 +123,7 @@ const Login = () => {
               name="password"
               type="password"
               autoComplete="current-password"
-              autoFocus
+              // autoFocus
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
