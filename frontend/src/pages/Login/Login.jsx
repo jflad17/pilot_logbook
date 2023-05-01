@@ -17,6 +17,8 @@ import {
   CssBaseline,
   Button,
   Typography,
+  FormGroup,
+  FormControlLabel,
 } from '@mui/material';
 
 
@@ -127,11 +129,26 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Switch
+            <FormGroup>
+              <FormControlLabel
+                label={'Remember Me'}
+                control={
+                  <Switch
+                    // sx={{ width: width ? width : '100%' }}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    value={rememberMe}
+                    margin="normal"
+                    // error={Boolean(fieldState.error)}
+                    // helperText={fieldState?.error?.message}
+                    // {...props}
+                  />}
+              />
+            </FormGroup>
+            {/* <Switch
               label="Remember Me"
               value={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-            />
+            /> */}
             <Button
               type="submit"
               fullWidth

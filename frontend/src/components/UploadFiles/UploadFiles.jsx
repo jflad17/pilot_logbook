@@ -28,40 +28,42 @@ function UploadFiles({ title }) {
   const uploadFiles = async () => {
     let url = '';
     if (airline.includes('North Dakota')) {
-
+      url = '/imports/und';
     } else if (airline.includes('SkyWest')) {
       url = '/imports/skywest';
     } else if (airline.includes('Delta')) {
-
+      toast.error('Sorry this import isn\'t available yet!');
     }
-    const formData = new FormData();
-    for (const a of accepted) {
-      formData.append('files', a);
-    }
-    formData.append('User_id', fetchUser().id);
-    formData.append('airline', airline);
-    formData.append('name', name);
-    await axios.post(url,
-        formData, { headers: { 'Content-Type': 'multipart/form-data' } })
-        .then((response) => {
-          for (const [d, t] of response.data) {
-            switch (t) {
-              case 'success':
-                toast.success(d);
-                break;
-              case 'warning':
-                toast.warning(d);
-                break;
-              case 'error':
-                toast.error(d);
-                break;
+    if (url != '') {
+      const formData = new FormData();
+      for (const a of accepted) {
+        formData.append('files', a);
+      }
+      formData.append('User_id', fetchUser().id);
+      formData.append('airline', airline);
+      formData.append('name', name);
+      await axios.post(url,
+          formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+          .then((response) => {
+            for (const [d, t] of response.data) {
+              switch (t) {
+                case 'success':
+                  toast.success(d);
+                  break;
+                case 'warning':
+                  toast.warning(d);
+                  break;
+                case 'error':
+                  toast.error(d);
+                  break;
+              }
             }
-          }
-          clear();
-        }).catch((error) => {
-          toast.error('Error uploading files');
-          throw error;
-        });
+            clear();
+          }).catch((error) => {
+            toast.error('Error uploading files');
+            throw error;
+          });
+    }
   };
 
   const acceptedFiles = accepted.map((file) => {

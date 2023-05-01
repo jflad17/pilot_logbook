@@ -10,7 +10,7 @@ from schemas.user import User
 
 class FlightBase(Base):
     date: date
-    aircraftIdentity: str
+    aircraftIdentity: Optional[str]
     departure: Optional[time] 
     arrival: Optional[time]
     totalFlightDuration: float
@@ -29,14 +29,21 @@ class FlightBase(Base):
     remarks: Optional[str]
     approaches: Optional[int]
     approachType: Optional[str]
-    crewMemberName: str
-    flightNumber: str
+    crewMemberName: Optional[str]
+    flightNumber: Optional[str]
     fileName: Optional[str]
+    course: Optional[str]
+    lesson: Optional[str]
+    status: Optional[str]
+    instructor: Optional[str]
+    oral: Optional[float]
+    dtl: Optional[int]
+    ntl: Optional[int]
     timestamp: Optional[datetime]
     to_Airport_id: Optional[int]
     from_Airport_id: Optional[int]
-    Aircraft_id: int
-    AircraftCategory_id: int
+    Aircraft_id: Optional[int]
+    AircraftCategory_id: Optional[int]
     AirlineIdentifier_id: int
     PilotType_id: int
     User_id: int
@@ -50,3 +57,4 @@ class Flight(FlightBase):
     aircraft_category:  Optional[AircraftCategory]
     pilot_type:  Optional[PilotType]
     user:  Optional[User]
+    to_airports: Optional[list[Airport]]

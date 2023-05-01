@@ -197,7 +197,8 @@ const FlightTable = () => {
       field: 'aircraft',
       width: 150,
       renderCell: (params) => {
-        return <div className="rowitem">{params.row.aircraft.name}</div>;
+        return <div className="rowitem">
+          {params.row.aircraft ? params.row.aircraft.name : ''}</div>;
       },
     },
     {
@@ -205,7 +206,9 @@ const FlightTable = () => {
       field: 'aircraft_category',
       width: 150,
       renderCell: (params) => {
-        return <div className="rowitem">{params.row.aircraft_category.shortName}</div>;
+        return <div className="rowitem">
+          {params.row.aircraft_category ? params.row.aircraft_category.shortName : ''}
+        </div>;
       },
     },
     {
@@ -226,15 +229,26 @@ const FlightTable = () => {
       field: 'from_airport',
       width: 150,
       renderCell: (params) => {
-        return <div className='rowitem'>{params.row.from_airport.code}</div>;
+        return <div className='rowitem'>
+          {params.row.from_airport ? params.row.from_airport.code : ''}
+        </div>;
       },
     },
     {
       headerName: 'To',
-      field: 'to_airport',
+      field: 'to_airports',
       width: 150,
       renderCell: (params) => {
-        return <div className='rowitem'>{params.row.to_airport.code}</div>;
+        let newCodes = '';
+        console.log(params.row.to_airports);
+        for (let index = 0; index < params.row.to_airports.length; index++) {
+          const element = params.row.to_airports[index];
+          newCodes += element.code;
+          if (index + 1 < params.row.to_airports.length) {
+            newCodes += '-';
+          }
+        }
+        return <div className='rowitem'>{newCodes}</div>;
       },
     },
     {
