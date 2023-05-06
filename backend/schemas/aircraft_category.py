@@ -2,6 +2,6 @@ from .base import Base
 
 
 class AircraftCategory(Base):
-    id: int
+    idAircraftCategory: int
     shortName: str
     name: str

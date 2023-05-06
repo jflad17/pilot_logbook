@@ -2,7 +2,7 @@ from .base import Base
 
 
 class AirlineIdentifier(Base):
-    id: int
-    letterCode: str | None
+    idAirlineIdentifier: int
+    letterCode: str
     name: str
-    accountCode: int | None
+    accountCode: int

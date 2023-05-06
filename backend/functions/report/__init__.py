@@ -1,2 +1,0 @@
-from .airplaneDetailedSummary import AirplaneDetailedSummaryPDF
-from .airplaneSummary import AirplaneSummaryPDF
