@@ -2,8 +2,8 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App';
-import reportWebVitals from '@services/reportWebVitals';
-import setupAxios from '@services/setupAxios';
+import reportWebVitals from './services/reportWebVitals';
+import setupAxios from './services/setupAxios';
 import { ToastContainer } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,7 +14,14 @@ const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(
     <React.StrictMode>
-      <ToastContainer/>
+      <ToastContainer
+        position='bottom-right'
+        autoClose={5000}
+        hideProgressBar={false}
+        closeOnClick={true}
+        pauseOnHover={true}
+        draggable={true}
+      />
       <App />
     </React.StrictMode>,
 );

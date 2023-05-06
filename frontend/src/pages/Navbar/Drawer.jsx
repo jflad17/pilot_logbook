@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
-import Logo from '../../images/logo.png';
+import Logo from '@images/logo.png';
 import Logout from './Logout';
 
 // const NavLinks = styled('div')(({ theme }) => ({
@@ -23,7 +23,7 @@ const NavLink = styled(Link)(({ theme }) => ({
   'textDecoration': 'none',
   'color': 'white',
   'fontSize': '20px',
-  'marginRight': theme.spacing(20),
+  'paddingRight': theme.spacing(20),
   '&:hover': {
     color: 'lightblue',
     borderBottom: '1px solid white',
@@ -31,7 +31,7 @@ const NavLink = styled(Link)(({ theme }) => ({
 }));
 
 const LogoBox = styled(Typography)({
-  cursor: 'pointer',
+  cursor: 'pointer', color: 'white',
 });
 
 /**
@@ -47,15 +47,17 @@ function DrawerComponent() {
         <MenuIcon />
       </IconButton>
       <Drawer
+        style={{ width: '220px' }}
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
         PaperProps={{ sx: { background: 'dimgrey' } }}
       >
-        <LogoBox>
-          <img width="50px" height="50px"
+        <LogoBox variant='h4'>
+          <NavLink to="/home"><img width="300px" height="175px"
             className="d-inline-block align-top img-responsive" src={Logo} alt="logo"/>
-          {' '}
-          Pilot Logbook
+          {/* {' '}
+            Pilot Logbook */}
+          </NavLink>
         </LogoBox>
         <List>
           <ListItem onClick={() => setOpenDrawer(false)}>
@@ -65,12 +67,17 @@ function DrawerComponent() {
           </ListItem>
           <ListItem onClick={() => setOpenDrawer(false)}>
             <ListItemText>
-              <NavLink to="/skywest-import">Skywest Import</NavLink>
+              <NavLink to="/import">Import</NavLink>
             </ListItemText>
           </ListItem>
           <ListItem onClick={() => setOpenDrawer(false)}>
             <ListItemText>
               <NavLink to="/flight-table">Flight Table</NavLink>
+            </ListItemText>
+          </ListItem>
+          <ListItem onClick={() => setOpenDrawer(false)}>
+            <ListItemText>
+              <NavLink to="/reports">Reports</NavLink>
             </ListItemText>
           </ListItem>
           <ListItem onClick={() => setOpenDrawer(false)}>

@@ -1,29 +1,69 @@
 import React from 'react';
-import { Container, FormControl, InputGroup, Button } from 'react-bootstrap';
+import axios from 'axios';
 import Dropzone from 'react-dropzone';
+import { toast } from 'react-toastify';
 import { PropTypes } from 'prop-types';
+// import { Container, FormControl, InputGroup, Button } from 'react-bootstrap';
+import { TextField, Box, Button, Paper } from '@mui/material';
+
+import { useAirlineIdentifier } from '@api';
+import { AutoComplete } from '@components';
+
 import './UploadFiles.css';
+import { fetchUser } from '../../Auth';
 
 /**
  *
  * @return {Component}
  */
-function UploadFiles({ type }) {
+function UploadFiles({ title }) {
   // const [selectedFiles, setSelectedFiles] = React.useState(undefined);
+  const airlineIdentifier = useAirlineIdentifier();
   const [accepted, setAccepted] = React.useState([]);
   const [rejected, setRejected] = React.useState([]);
-  const [message, setMessage] = React.useState([]);
-  const [name, setName] = React.useState('');
-
+  const [name, setName] = React.useState(process.env.REACT_APP_DEFAULT_PILOT ?? '');
+  const [airline, setAirline] = React.useState(process.env.REACT_APP_DEFAULT_AIRLINE ?? null);
   // const [fileInfos, setFileInfos] = React.useState([]);
 
-  const uploadFiles = () => {
-    if (type === 'skywest') {
-      console.log('accepted', accepted);
-      axios.post('/flight/skywest-import/');
+  const uploadFiles = async () => {
+    let url = '';
+    if (airline.includes('North Dakota')) {
+      url = '/imports/und';
+    } else if (airline.includes('SkyWest')) {
+      url = '/imports/skywest';
+    } else if (airline.includes('Delta')) {
+      toast.error('Sorry this import isn\'t available yet!');
     }
-    console.log(message);
-    setMessage([]);
+    if (url != '') {
+      const formData = new FormData();
+      for (const a of accepted) {
+        formData.append('files', a);
+      }
+      formData.append('User_id', fetchUser().id);
+      formData.append('airline', airline);
+      formData.append('name', name);
+      await axios.post(url,
+          formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+          .then((response) => {
+            for (const [d, t] of response.data) {
+              switch (t) {
+                case 'success':
+                  toast.success(d);
+                  break;
+                case 'warning':
+                  toast.warning(d);
+                  break;
+                case 'error':
+                  toast.error(d);
+                  break;
+              }
+            }
+            clear();
+          }).catch((error) => {
+            toast.error('Error uploading files');
+            throw error;
+          });
+    }
   };
 
   const acceptedFiles = accepted.map((file) => {
@@ -35,7 +75,7 @@ function UploadFiles({ type }) {
   });
 
   const rejectedFiles = rejected.map(({ file, errors }) => {
-    console.log(file, errors);
+    // console.log(file, errors);
     return (
       <li key={file.path}>
         {file.path} - {file.size} bytes
@@ -52,30 +92,52 @@ function UploadFiles({ type }) {
   const clear = () => {
     setAccepted([]);
     setRejected([]);
-    setName('');
-    setMessage('');
   };
 
 
   return (
     <>
-      <Container className="mt-3">
+
+      <Paper elevation={3}>
+        <center><h2>{title}</h2></center>
         <center>
-          <InputGroup className="mb-3 pilotName">
-            <InputGroup.Text id="basic-addon1">Pilot Name</InputGroup.Text>
-            <FormControl
-              placeholder="Pilot Name"
-              autoFocus
-              type="text"
+          <Box
+            component="form"
+            sx={{
+              '& .MuiTextField-root': { m: 1, width: '25ch' },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <AutoComplete
+              label='Airline'
+              name='AirlineIdentifier_id'
+              data={airlineIdentifier.data}
+              isLoading={airlineIdentifier.isLoading}
+              getOptionLabel={(option) => `${option.name}`}
+              onChange={(e, data) => {
+                // console.log('data', data);
+                setAirline(data ? data.name: null);
+              }}
+              defaultValue={airline}
+              // disabled
+            />
+            <TextField
+              required
+              label="Pilot"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              // disabled
             />
-          </InputGroup>
+          </Box>
         </center>
-        <div className="p-6 mb-4 bg-light rounded-4 opacity-75 ">
+        <div className="p-6 mb-4 bg-light rounded-4 ">
           <div className="container-fluid py-2 dropzone-container">
             <Dropzone
-              onDropAccepted={(files) => setAccepted(accepted.concat(files))}
+              onDropAccepted={(files) => {
+                // console.log(files);
+                setAccepted(accepted.concat(files));
+              }}
               onDropRejected={(files) => setRejected(rejected.concat(files))}
               multiple={true} accept=".csv">
               {({ getRootProps, getInputProps }) => (
@@ -93,41 +155,29 @@ function UploadFiles({ type }) {
                   </aside>
                   <div className='text-center'>
                     <Button
-                      variant="success"
-                      className="opacity-100"
-                      disabled={name === '' || accepted.length === 0}
+                      variant="contained"
+                      color="success"
+                      disabled={airline === null || name === '' || accepted.length === 0}
                       onClick={uploadFiles}
                     >
                     Upload
                     </Button>
                     {' '}
                     <Button
-                      variant="secondary"
-                      className="opacity-100"
-                      disabled={name === '' || accepted.length === 0}
+                      variant="contained"
+                      color="secondary"
+                      disabled={airline === null || name === '' || accepted.length === 0}
                       onClick={clear}
                     >
                     Clear
                     </Button>
-                  </div>
-                  <div>
-                    {message}
                   </div>
                 </section>
               )}
             </Dropzone>
           </div>
         </div>
-        {message && message.length > 0 && (
-          <div className="alert alert-secondary" role="alert">
-            <ul>
-              {message.map((item, i) => {
-                return <li key={i}>{item}</li>;
-              })}
-            </ul>
-          </div>
-        )}
-      </Container>
+      </Paper>
     </>
   );
 }
@@ -135,4 +185,5 @@ export default UploadFiles;
 
 UploadFiles.propTypes = {
   type: PropTypes.string,
+  title: PropTypes.string,
 };

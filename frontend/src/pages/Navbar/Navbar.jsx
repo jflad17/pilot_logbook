@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import Logo from '../../images/logo.png';
+import HeaderLogo from '@images/headerLogo.png';
 import Logout from './Logout';
 // import { RequireToken } from '../../Auth';
 
@@ -43,7 +43,8 @@ const LogoBox = styled(Typography)({
 function Navbar() {
   // const classes = useStyles();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  // const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <>
@@ -51,23 +52,27 @@ function Navbar() {
         <CssBaseline />
         <Toolbar>
           <LogoBox variant="h5">
-            <img width="35px" height="35px"
-              className="d-inline-block align-top img-responsive" src={Logo} alt="logo"/>
-            {' '}
-            Pilot Logbook
+            <NavLink to="/home"><img width="225px" height="40px"
+              className="d-inline-block align-top img-responsive" src={HeaderLogo} alt="Header Logo"/>
+            {/* {' '}
+            Pilot Logbook */}
+            </NavLink>
           </LogoBox>
           {isMobile ? (
-            <Drawer/>
+            <Drawer />
           ) : (
           <NavLinks>
             <NavLink to="/home">
                 Home
             </NavLink>
-            <NavLink to="/skywest-import">
-                Skywest Import
+            <NavLink to="/import">
+                Import
             </NavLink>
             <NavLink to="/flight-table">
                 Flight Table
+            </NavLink>
+            <NavLink to="/reports">
+                Reports
             </NavLink>
             <NavLink to="/register">
                 Register

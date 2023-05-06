@@ -2,6 +2,7 @@ from .base import Base
 
 
 class PilotType(Base):
-    idPilotType: int
+    id: int
     shortName: str
     name: str
+    PIC: bool

@@ -1,12 +1,12 @@
 .login-form {
-  padding-top: 300px!important;
-  width: 350px!important;
-  max-width: 350px;
+  padding-top: 5%!important;
+  min-width: 350px!important;
+  max-width: 400px;
   /* opacity: 75%; */
 }
 
 .login-bg {
-  background-color: white;
+  background-color: whitesmoke;
   padding: 50px;
   border-radius: 10px;
 }

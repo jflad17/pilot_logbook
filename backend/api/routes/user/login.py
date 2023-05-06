@@ -1,6 +1,7 @@
+import json
 from datetime import timedelta
 from fastapi import APIRouter, Body, Depends, HTTPException
-from sqlalchemy import update, insert
+from sqlalchemy import update
 from fastapi.security import OAuth2PasswordRequestForm
 from core.security import ACCESS_TOKEN_EXPIRE_MINUTES, authenticate, create_access_token, get_user, get_password_hash, validate_password, verify_password
 from dependencies import get_db
@@ -12,7 +13,7 @@ router = APIRouter(
 )
 
 @router.post('/token', response_model=schemas.Token)
-async def login(rememberMe: bool | None = Body(None), changed_password: str | None = Body(None), form_data: OAuth2PasswordRequestForm = Depends(), db=Depends(get_db)):
+async def login(rememberMe: bool = Body(None), changed_password: str | None = Body(None), form_data: OAuth2PasswordRequestForm = Depends(), db=Depends(get_db)):
   username = form_data.username
   password = form_data.password
   user = get_user(db, username=username)
@@ -26,7 +27,7 @@ async def login(rememberMe: bool | None = Body(None), changed_password: str | No
         password_hash = get_password_hash(changed_password)
         db.execute(
           update(models.User)
-          .where(models.User.idUser == user.idUser)
+          .where(models.User.id == user.id)
           .values(password=password_hash, resetPassword=0)
         )
         db.commit()
@@ -42,7 +43,6 @@ async def login(rememberMe: bool | None = Body(None), changed_password: str | No
           raise HTTPException(status_code=402, detail="Account locked, too many login attempts.")
       if authenticate(db, username, password):
         access_token = create_access_token(data={"sub": username}, expires_delta=expiration)
-        print(user)
         return {"user": user, "access_token": access_token, "token_type": "bearer"}
       else:
         raise HTTPException(status_code=401, detail="Incorrect password")

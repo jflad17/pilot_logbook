@@ -1,10 +1,16 @@
 import React from 'react';
-import axios from 'axios';
+import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import {
+  object,
+  string,
+  ref,
+} from 'yup';
 import {
   // createTheme,
   Box,
-  TextField,
+  Paper,
+  // TextField,
   // ThemeProvider,
   Container,
   CssBaseline,
@@ -12,6 +18,9 @@ import {
   Typography,
 } from '@mui/material';
 import './Register.css';
+import { useCreateUser } from '@api/user';
+import { Input } from '@components/Form';
+import useYupResolver from '@services/useYupResolver';
 
 /**
  *
@@ -19,86 +28,63 @@ import './Register.css';
  */
 
 const Register = () => {
-  const [firstName, setFirstName] = React.useState('');
-  const [lastName, setLastName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [confirmPassword, setConfirmPassword] = React.useState('');
+  const createUserMutate = useCreateUser();
 
+  const defaultValues = React.useMemo(() => {
+    return {
+      firstName: '',
+      lastName: '',
+      email: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
+    };
+  }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if ((firstName === '') & (lastName === '') & (email === '') &
-     (username === '') & (password === '') & (confirmPassword === '')) {
-      toast.error('All fields required!', {
-        position: 'top-center',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      },
-      );
+  const validationSchema = object().shape({
+    firstName: string().required('First name is required'),
+    lastName: string().required('Last name is required'),
+    email: string().email().required('Email is required'),
+    username: string().required('Username is required'),
+    password: string().required('Password is required'),
+    confirmPassword: string().oneOf([ref('password'), null], 'Passwords must match'),
+  });
+
+  const resolver = useYupResolver(validationSchema);
+
+  const { control, handleSubmit, reset } = useForm({
+    resolver,
+    defaultValues,
+    shouldUnregister: false,
+  });
+
+  const onSubmitHandler = async (data) => {
+    if (data.password === data.confirmPassword) {
+      const newUser = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        username: data.username,
+        password: data.password,
+      };
+      createUserMutate.mutateAsync(newUser)
+          .then((data) => {
+            if (!data.detail) {
+              reset(defaultValues);
+            } else {
+              toast.error(data.detail);
+            }
+          });
     } else {
-      if (password === confirmPassword) {
-        const formData = new FormData();
-        formData.append('firstName', firstName);
-        formData.append('lastName', lastName);
-        formData.append('email', email);
-        formData.append('username', username);
-        formData.append('password', password);
-        axios.post(`/register/`, formData)
-            .then((response) => {
-              console.log(response);
-              if (response.data.access_token) {
-                setToken(response.data.access_token);
-                setFirstName('');
-                setLastName('');
-                setEmail('');
-                setUsername('');
-                setPassword('');
-                toast.success('User created!', {
-                  position: 'top-center',
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                },
-                );
-              }
-            }).catch((error) => {
-              console.error('Error creating user!');
-              throw error;
-            });
-      } else {
-        toast.error('Passwords do not match!', {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        },
-        );
-      }
+      toast.error('Passwords do not match!');
     }
-  };
-
-  const validateForm = () => {
-    return firstName.length > 0 && lastName.length > 0 && email.length > 0 && username.length > 0 &&
-      password.length > 0 && confirmPassword.length > 0;
   };
 
   return (
     <>
       <Container className="register-form" maxWidth="sm">
         <CssBaseline />
-        <Box
+        <Paper
           className='register-bg'
           sx={{
             marginTop: 4,
@@ -109,79 +95,61 @@ const Register = () => {
           <Typography component="h1" variant="h5">
                 Register
           </Typography>
-          <Box component="form" style={{ opacity: '100%!important' }} onSubmit={handleSubmit} sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="firstName"
-              label="First Name"
+          <Box component="form" onSubmit={handleSubmit(onSubmitHandler)} sx={{ mt: 1 }}>
+            <Input
+              control={control}
+              type="text"
               name="firstName"
-              type="text"
+              label="First Name"
               autoComplete="given-name"
+              fullWidth
               autoFocus
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-            <TextField
-              margin="normal"
               required
-              fullWidth
-              id="lastName"
-              label="Last Name"
+            />
+            <Input
+              control={control}
+              type="text"
               name="lastName"
-              type="text"
+              label="Last Name"
               autoComplete="family-name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              required
               fullWidth
-              id="email"
-              label="Email"
+              required
+            />
+            <Input
+              control={control}
+              type="email"
               name="email"
-              type="text"
+              label="Email"
               autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              required
               fullWidth
-              id="username"
-              label="Username"
-              name="username"
+              required
+            />
+            <Input
+              control={control}
               type="text"
+              name="username"
+              label="Username"
               autoComplete="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              required
               fullWidth
-              id="password"
-              label="Password"
+              required
+            />
+            <Input
+              control={control}
+              type="password"
               name="password"
-              type="password"
+              label="Password"
               autoComplete="new-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              required
               fullWidth
-              id="confirmPassword"
-              label="Confirm Password"
-              name="confirmPassword"
+              required
+            />
+            <Input
+              control={control}
               type="password"
+              name="confirmPassword"
+              label="Confirm Password"
               autoComplete="new-password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              fullWidth
+              required
             />
             <Button
               type="submit"
@@ -189,12 +157,12 @@ const Register = () => {
               variant="contained"
               color="info"
               sx={{ mt: 3, mb: 2 }}
-              disabled={!validateForm()}
+              // disabled={!validateForm()}
             >
               Register
             </Button>
           </Box>
-        </Box>
+        </Paper>
       </Container>
     </>
   );

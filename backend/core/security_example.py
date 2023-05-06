@@ -5,7 +5,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 import re
 from models.user import User as user_model
-from schemas.token import TokenData
+from schemas import TokenData
 from sqlalchemy import select
 from pydantic import ValidationError
 
