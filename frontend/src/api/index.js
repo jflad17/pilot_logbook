@@ -1,4 +1,11 @@
 import {
+  useAircraft,
+  useCreateAircraft,
+  useDeleteAircraft,
+  useUpdateAircraft,
+} from './aircraft';
+
+import {
   useAircraftCategory,
   useCreateAircraftCategory,
   useDeleteAircraftCategory,
@@ -26,8 +33,20 @@ import {
   useUpdatePilotType,
 } from './pilot_type';
 
+import {
+  useAirport,
+} from './airport';
+
+import {
+  useReport,
+} from './report';
 
 export {
+  useAirport,
+  useAircraft,
+  useCreateAircraft,
+  useDeleteAircraft,
+  useUpdateAircraft,
   useAircraftCategory,
   useCreateAircraftCategory,
   useDeleteAircraftCategory,
@@ -44,4 +63,5 @@ export {
   useCreatePilotType,
   useDeletePilotType,
   useUpdatePilotType,
+  useReport,
 };

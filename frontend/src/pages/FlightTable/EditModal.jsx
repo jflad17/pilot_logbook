@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { PropTypes } from 'prop-types';
+import { DateTime } from 'luxon';
 
 import
 {
@@ -12,15 +13,19 @@ import
 } from 'yup';
 import { format } from 'date-fns';
 import mapValues from 'lodash/mapValues';
-import { Paper, Button } from '@mui/material';
+import { Paper, Button,
+  // createFilterOptions,
+} from '@mui/material';
 
 import
 {
-  useAircraftCategory,
-  useAirlineIdentifier,
-  usePilotType,
-  // useCreateFlight,
-  // useUpdateFlight,
+  useAirport,
+  // useAircraft,
+  // useAircraftCategory,
+  // useAirlineIdentifier,
+  // usePilotType,
+  useCreateFlight,
+  useUpdateFlight,
 } from '@api';
 import { Modal } from '@components';
 import { AutoComplete,
@@ -36,40 +41,41 @@ import { fetchUser } from '../../Auth';
  */
 
 const EditModal = ({ open, handleClose, handleOpen, editData }) => {
-  console.log('editdata', editData);
-  const aircraftCategory = useAircraftCategory();
-  const airlineIdentifier = useAirlineIdentifier();
-  const pilotType = usePilotType();
+  const airport = useAirport();
+  // const aircraft = useAircraft();
+  // const aircraftCategory = useAircraftCategory();
+  // const airlineIdentifier = useAirlineIdentifier();
+  // const pilotType = usePilotType();
 
-  // const createFlightMutation = useCreateFlight();
-  // const updateFlightMutation = useUpdateFlight();
+  const createFlightMutation = useCreateFlight();
+  const updateFlightMutation = useUpdateFlight();
 
   const defaultValues = React.useMemo(() => {
     return {
       date: '',
-      aircraftType: '',
       aircraftIdentity: '',
-      fromAirport: '',
-      toAirport: '',
       departure: '',
       arrival: '',
       totalFlightDuration: '',
-      dayLanding: '',
-      nightLanding: '',
-      actualInstrument: '',
-      simulatedInstrumentUnderHood: '',
-      atdInstrument: '',
+      dayLanding: 0,
+      nightLanding: 0,
+      actualInstrument: 0,
+      simulatedInstrumentUnderHood: 0,
+      atdInstrument: 0,
       hold: false,
-      fullFlightSim: '',
-      groundTrainer: '',
+      fullFlightSim: 0,
+      groundTrainer: 0,
       lineCheck: false,
-      crossCountryTime: '',
+      crossCountryTime: 0,
       initialOperatingExperience: false,
       remarks: '',
-      approaches: '',
+      approaches: 0,
       approachType: '',
       crewMemberName: '',
       flightNumber: '',
+      to_Airport_id: '',
+      from_Airport_id: '',
+      Aircraft_id: '',
       AirlineIdentifier_id: '',
       AircraftCategory_id: '',
       PilotType_id: '',
@@ -78,50 +84,50 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
 
   const validationSchema = object().shape({
     date: date().required(),
-    aircraftType: string().required(),
     aircraftIdentity: string().required(),
-    fromAirport: string().required(),
-    toAirport: string().required(),
     departure: string().required(),
     arrival: string().required(),
     totalFlightDuration: number().required().test(
         'is-decimal',
         'Invalid decimal',
         (value) => (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
-    dayLanding: number(),
-    nightLanding: number(),
-    actualInstrument: number().test(
+    dayLanding: number().nullable(),
+    nightLanding: number().nullable(),
+    actualInstrument: number().nullable().test(
         'is-decimal',
         'Invalid decimal',
-        (value) => (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
-    simulatedInstrumentUnderHood: number().test(
+        (value) => !value || (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
+    simulatedInstrumentUnderHood: number().nullable().test(
         'is-decimal',
         'Invalid decimal',
-        (value) => (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
-    atdInstrument: number().test(
+        (value) => !value || (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
+    atdInstrument: number().nullable().test(
         'is-decimal',
         'Invalid decimal',
-        (value) => (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
+        (value) => !value || (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
     hold: bool(),
-    fullFlightSim: number().test(
+    fullFlightSim: number().nullable().test(
         'is-decimal',
         'Invalid decimal',
-        (value) => (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
-    groundTrainer: number().test(
+        (value) => !value || (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
+    groundTrainer: number().nullable().test(
         'is-decimal',
         'Invalid decimal',
-        (value) => (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
-    lineCheck: bool(),
-    crossCountryTime: number(),
-    initialOperatingExperience: bool(),
+        (value) => !value || (value + '').match(/^[0-9]*(\.[0-9]{0,2})?$/)),
+    lineCheck: bool().default(false),
+    crossCountryTime: number().nullable().default(0),
+    initialOperatingExperience: bool().default(false),
     remarks: string().nullable(),
-    approaches: number(),
+    approaches: number().nullable().default(0),
     approachType: string().nullable(),
-    crewMemberName: string().required(),
+    crewMemberName: string().nullable(),
     flightNumber: string().required(),
-    AirlineIdentifier_id: number().required('Number required'),
-    AircraftCategory_id: number().required(),
-    PilotType_id: number().required(),
+    to_Airport_id: number().required('To Airport required'),
+    from_Airport_id: number().required('From Airport required'),
+    Aircraft_id: number().required('Aircraft required'),
+    AircraftCategory_id: number().required('Aircraft required'),
+    AirlineIdentifier_id: number().required('Airline required'),
+    PilotType_id: number().required('Pilot Type required'),
   });
 
   const resolver = useYupResolver(validationSchema);
@@ -142,10 +148,13 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
     if (Object.keys(editData).length === 0) {
       reset(defaultValues);
     } else {
+      console.log('open', open);
       if (open && Object.keys(editData).length > 0) {
-        console.log('editData', editData);
+        console.log('editdata open', editData);
         mapValues(editData, (value, key) => {
-          setValue(key, value);
+          if (key in defaultValues) {
+            setValue(key, value);
+          }
         });
       }
     }
@@ -166,57 +175,111 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
 
   const onSubmitHandler = (data) => {
     console.log('errors', errors);
-    console.log('data', data);
+    data.date = DateTime.fromJSDate(data.date).toFormat('yyyy-MM-dd');
     data.User_id = fetchUser().id;
-
-    // if (editData) {
-    //   data.id = editData.id;
-    //   updateFlightMutation.mutate(data);
-    // } else {
-    //   createFlightMutation.mutate(data);
-    // }
+    if (Object.keys(editData).length > 0) {
+      data.id = editData.id;
+      updateFlightMutation.mutate(data);
+      handleClose();
+    } else {
+      createFlightMutation.mutate(data);
+      handleClose();
+    }
   };
 
   const Content = () => {
     return (
       <>
         <Paper>
-          <AutoComplete
-            control={control}
-            label='Airline'
-            name='AirlineIdentifier_id'
-            data={airlineIdentifier.data}
-            isLoading={airlineIdentifier.isLoading}
-            getOptionLabel={(option) => option.name}
-            // renderOption={(props, option, state) => (
-            //   <span key={`${option.name}`}>
-            //     {option.name}
-            //   </span>
-            // )}
-          />
           <Datepicker
             control={control}
             label='Date'
             name="date"
             defaultValue={!editData ? format(new Date(), 'MM/dd/yyyy') : null}
           />
-          <Input
+          {/* <AutoComplete
             control={control}
-            type="text"
-            name="aircraftType"
-            label="Aircraft Type"
+            label='Airline'
+            name='AirlineIdentifier_id'
+            data={airlineIdentifier.data}
+            isLoading={airlineIdentifier.isLoading}
+            // setOptions={(option) => ({
+            //   value: option.id, label: option.name,
+            // })}
+            getOptionLabel={(option) => option.name}
           />
-          <Input
+          <AutoComplete
             control={control}
-            type="text"
-            name="fromAirport"
-            label="From Airport"
+            label='Pilot Type'
+            name='PilotType_id'
+            data={pilotType.data}
+            isLoading={pilotType.isLoading}
+            // setOptions={(option) => ({
+            //   value: option.id, label: option.shortName,
+            // })}
+            getOptionLabel={(option) => option.shortName}
           />
+          <AutoComplete
+            control={control}
+            label='Aircraft'
+            name='Aircraft_id'
+            data={aircraft.data}
+            isLoading={aircraft.isLoading}
+            // setOptions={(option) => ({
+            //   value: option.id, label: option.name,
+            // })}
+            getOptionLabel={(option) => option.name}
+          />
+          <AutoComplete
+            control={control}
+            label='Aircraft Category'
+            name='AircraftCategory_id'
+            data={aircraftCategory.data}
+            isLoading={aircraftCategory.isLoading}
+            // setOptions={(option) => ({
+            //   value: option.id, label: option.shortName,
+            // })}
+            getOptionLabel={(option) => option.shortName}
+          /> */}
+          <AutoComplete
+            control={control}
+            label='From Airport'
+            name='from_Airport_id'
+            data={airport.data}
+            isLoading={airport.isLoading}
+            inputName={'code'}
+            // setOptions={(option) => ({
+            //   value: option.id, label: option.code,
+            // })}
+            // getOptionLabel={(option) => option.code}
+            // allowCreate={true}
+            // filterOptions={(options, params) => {
+            //   const filter = createFilterOptions(options, params);
+            //   const { inputValue }= params;
+            //   const isExisting = options.some((option) => inputValue === option.code);
+            //   if (inputValue !== '' && !isExisting) {
+            //     filter.push({ inputValue, title: `Add "${inputValue}"` });
+            //   }
+            //   return filter;
+            // }}
+          />
+          {/* <AutoComplete
+            control={control}
+            label='To Airport'
+            name='to_Airport_id'
+            data={airport.data}
+            isLoading={airport.isLoading}
+            // setOptions={(option) => ({
+            //   value: option.id, label: option.code,
+            // })}
+            getOptionLabel={(option) => option.code}
+            // allowCreate={true}
+          /> */}
           <Input
             control={control}
             type="text"
-            name="toAirport"
-            label="To Airport"
+            name="aircraftIdentity"
+            label="Aircraft Identity"
           />
           <Input
             control={control}
@@ -315,6 +378,12 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
           <Input
             control={control}
             type="text"
+            name="crewMemberName"
+            label="Co-Pilot"
+          />
+          <Input
+            control={control}
+            type="text"
             name="remarks"
             label="Remarks"
             multiline
@@ -335,22 +404,6 @@ const EditModal = ({ open, handleClose, handleOpen, editData }) => {
             multiline
             rows={2}
             maxRows={4}
-          />
-          <AutoComplete
-            control={control}
-            label='Pilot Type'
-            name='PilotType_id'
-            data={pilotType.data}
-            isLoading={pilotType.isLoading}
-            getOptionLabel={(option) => `${option.shortName}`}
-          />
-          <AutoComplete
-            control={control}
-            label='Aircraft'
-            name='AircraftCategory_id'
-            data={aircraftCategory.data}
-            isLoading={aircraftCategory.isLoading}
-            getOptionLabel={(option) => `${option.shortName}`}
           />
         </Paper>
       </>

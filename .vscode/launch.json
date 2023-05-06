@@ -6,18 +6,18 @@
   "configurations": [
     {
       "name": "Chrome",
-      "type": "pwa-chrome",
+      "type": "chrome",
       "request": "launch",
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/frontend/src",
-      "preLaunchTask": "npm: start"
+      "preLaunchTask": "npm: develop"
     },
     {
       "name": "Python: FastAPI",
       "type": "python",
       "request": "launch",
       "module": "uvicorn",
-      "args": ["main:app", "--port", "9000", "--reload"],
+      "args": ["main:app", "--host", "localhost", "--port", "9000", "--reload"],
       "cwd": "${workspaceRoot}/backend",
       "jinja": true,
       "justMyCode": true

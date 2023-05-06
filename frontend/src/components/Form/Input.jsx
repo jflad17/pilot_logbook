@@ -12,17 +12,13 @@ import { TextField } from '@mui/material';
  */
 function Input({ type, defaultValue, label, name, autoComplete=null, control=null, width=null, ...props }) {
   const _form = useFormContext();
-  console.log('DEFALT', defaultValue);
   if (defaultValue === undefined) {
-    console.log('type', type);
     if (type === 'number') {
-      console.log('here');
       defaultValue = 0;
     } else {
       defaultValue = '';
     }
   }
-  console.log(defaultValue);
   if (control === undefined) {
     control = _form.control;
   }
@@ -32,21 +28,22 @@ function Input({ type, defaultValue, label, name, autoComplete=null, control=nul
         control={control}
         name={name}
         defaultValue={defaultValue}
-        render={({ field: { onChange, value }, fieldState, ...props }) => (
-          <TextField
-            sx={{ width: width ? width : '100%' }}
-            autoComplete={autoComplete}
-            label={label}
-            type={type}
-            onChange={onChange}
-            value={value !== undefined ? value : type === 'number' ? 0 : ''}
-            margin="normal"
-            error={Boolean(fieldState.error)}
-            helperText={fieldState?.error?.message}
-            {...props}
-          />
-        )}
-
+        render={({ field, fieldState }) => {
+          // console.log('value', (value !== undefined && value !== null) ? value : defaultValue);
+          return (
+            <TextField
+              {...field}
+              sx={{ width: width ? width : '100%' }}
+              autoComplete={autoComplete}
+              label={label}
+              type={type}
+              // value={value !== undefined ? value : type === 'number' ? 0 : ''}
+              // value={(value !== undefined && value !== null) ? value : defaultValue}
+              margin="normal"
+              error={Boolean(fieldState.error)}
+              helperText={fieldState?.error?.message}
+            />);
+        }}
       />
     </>
   );

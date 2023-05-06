@@ -17,6 +17,8 @@ import {
   CssBaseline,
   Button,
   Typography,
+  FormGroup,
+  FormControlLabel,
 } from '@mui/material';
 
 
@@ -92,10 +94,10 @@ const Login = () => {
             alignItems: 'center',
           }}>
           <LogoBox variant="h4">
-            <img width="35px" height="35px"
+            <img width="300px" height="175px"
               className="d-inline-block align-top img-responsive" src={Logo} alt="logo"/>
-            {' '}
-            Pilot Logbook
+            {/* {' '}
+            Pilot Logbook */}
           </LogoBox>
           <Typography variant="h5">
                 Sign In
@@ -123,15 +125,30 @@ const Login = () => {
               name="password"
               type="password"
               autoComplete="current-password"
-              autoFocus
+              // autoFocus
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Switch
+            <FormGroup>
+              <FormControlLabel
+                label={'Remember Me'}
+                control={
+                  <Switch
+                    // sx={{ width: width ? width : '100%' }}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    value={rememberMe}
+                    margin="normal"
+                    // error={Boolean(fieldState.error)}
+                    // helperText={fieldState?.error?.message}
+                    // {...props}
+                  />}
+              />
+            </FormGroup>
+            {/* <Switch
               label="Remember Me"
               value={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-            />
+            /> */}
             <Button
               type="submit"
               fullWidth

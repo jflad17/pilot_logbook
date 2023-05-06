@@ -26,7 +26,15 @@ function UploadFiles({ title }) {
   // const [fileInfos, setFileInfos] = React.useState([]);
 
   const uploadFiles = async () => {
-    if (airline.includes('SkyWest')) {
+    let url = '';
+    if (airline.includes('North Dakota')) {
+      url = '/imports/und';
+    } else if (airline.includes('SkyWest')) {
+      url = '/imports/skywest';
+    } else if (airline.includes('Delta')) {
+      toast.error('Sorry this import isn\'t available yet!');
+    }
+    if (url != '') {
       const formData = new FormData();
       for (const a of accepted) {
         formData.append('files', a);
@@ -34,7 +42,7 @@ function UploadFiles({ title }) {
       formData.append('User_id', fetchUser().id);
       formData.append('airline', airline);
       formData.append('name', name);
-      await axios.post('/imports/skywest/',
+      await axios.post(url,
           formData, { headers: { 'Content-Type': 'multipart/form-data' } })
           .then((response) => {
             for (const [d, t] of response.data) {
@@ -112,14 +120,14 @@ function UploadFiles({ title }) {
                 setAirline(data ? data.name: null);
               }}
               defaultValue={airline}
-              disabled
+              // disabled
             />
             <TextField
               required
               label="Pilot"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              disabled
+              // disabled
             />
           </Box>
         </center>
