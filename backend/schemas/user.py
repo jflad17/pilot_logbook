@@ -1,19 +1,16 @@
 from .base import Base
 
 
-class UserBase(Base):
+class User(Base):
+    idUser: int
+    admin: bool
     username: str
     firstName: str
     lastName: str
-    email: str
-    
-
-class User(UserBase):
-    id: int
-    admin: bool
     resetPassword: bool
     loginAttempts: int
     maxLoginAttempts: int
+
 
 class Token(Base):
     access_token: str
@@ -26,5 +23,8 @@ class TokenData(Base):
     scopes: list[str] = []
 
 
-class NewUser(UserBase):
+class NewUser(Base):
+    username: str
+    firstName: str
+    lastName: str
     password: str

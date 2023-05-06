@@ -42,15 +42,15 @@ const BootstrapDialogTitle = (props) => {
 };
 
 BootstrapDialogTitle.propTypes = {
-  children: PropTypes.any,
-  onClose: PropTypes.any,
+  children: PropTypes.children,
+  onClose: PropTypes.function,
 };
 
 /**
  *
  * @return {Component} CustomizedDialog Component
  */
-function Modal({ Content, handleClickOpen, open, handleClose, title, Buttons, useForm = False, onSubmit=null }) {
+function CustomizedDialogs({ Content, handleClickOpen, open, handleClose, title, Buttons }) {
   // const [open, setOpen] = React.useState(false);
 
   // const handleClickOpen = () => {
@@ -63,50 +63,31 @@ function Modal({ Content, handleClickOpen, open, handleClose, title, Buttons, us
   return (
     <div>
       <BootstrapDialog
-        onClose={(_, reason) => {
-          if (reason !== 'backdropClick') {
-            handleClose();
-          }
-        }}
+        onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open}
       >
         <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
           {title}
         </BootstrapDialogTitle>
-        {useForm === true ? (
-          <form onSubmit={onSubmit} noValidate>
-            <DialogContent dividers>
-              <Content />
-            </DialogContent>
-            <DialogActions>
-              <Buttons />
-            </DialogActions>
-          </form>
-        ) : (
-          <>
-            <DialogContent dividers>
-              <Content />
-            </DialogContent>
-            <DialogActions>
-              <Buttons />
-            </DialogActions>
-          </>
-          )}
+        <DialogContent dividers>
+          <Content/>
+        </DialogContent>
+        <DialogActions>
+          <Buttons />
+        </DialogActions>
       </BootstrapDialog>
     </div>
   );
 }
 
-export default Modal;
+export default CustomizedDialogs;
 
-Modal.propTypes = {
-  Content: PropTypes.func,
+CustomizedDialogs.propTypes = {
+  Content: PropTypes.Component,
   handleClickOpen: PropTypes.func,
   open: PropTypes.bool,
   handleClose: PropTypes.func,
   title: PropTypes.string,
-  Buttons: PropTypes.any,
-  useForm: PropTypes.bool,
-  onSubmit: PropTypes.func,
+  Buttons: PropTypes.Component,
 };

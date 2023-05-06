@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useLocation, Navigate } from 'react-router-dom';
 
 export const setToken = (token, user) => {
-  localStorage.setItem('user', JSON.stringify(user));
+  localStorage.setItem('user', user);
   localStorage.setItem('token', token);
 };
 
@@ -12,7 +12,7 @@ export const fetchToken = () => {
 };
 
 export const fetchUser = () => {
-  return JSON.parse(localStorage.getItem('user'));
+  return localStorage.getItem('user');
 };
 
 /**

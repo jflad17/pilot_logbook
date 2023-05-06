@@ -5,6 +5,7 @@
 }
 
 .flight-table {
+  min-width: 600px;
   max-width: 100%;
   align-items: center;
   align-self: center;

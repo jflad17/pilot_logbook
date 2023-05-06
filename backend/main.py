@@ -6,7 +6,6 @@ from core.config import settings
 from core.logger import InterceptHandler, format_record
 
 from loguru import logger
-from datetime import date
 import logging
 import sys
 import uvicorn
@@ -41,7 +40,7 @@ logging.getLogger("uvicorn").handlers = [InterceptHandler()]
 
 logger.configure(handlers=[{"sink": sys.stdout, "level": logging.DEBUG, "format": format_record}])
 if settings.SERVER == True:
-    logger.add(settings.PROJECT_ROOT + "/logs/" + date.strftime("%Y-%m-%d") + "_api.log", rotation="1 day")
+    logger.add(settings.PROJECT_ROOT + "/logs/api.log", rotation="1 day")
 
 # if __name__ == "__main__":
 #     uvicorn.run(app, host="0.0.0.0", port=9000)

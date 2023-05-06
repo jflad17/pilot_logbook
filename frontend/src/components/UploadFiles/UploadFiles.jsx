@@ -1,69 +1,29 @@
 import React from 'react';
-import axios from 'axios';
+import { Container, FormControl, InputGroup, Button } from 'react-bootstrap';
 import Dropzone from 'react-dropzone';
-import { toast } from 'react-toastify';
 import { PropTypes } from 'prop-types';
-// import { Container, FormControl, InputGroup, Button } from 'react-bootstrap';
-import { TextField, Box, Button, Paper } from '@mui/material';
-
-import { useAirlineIdentifier } from '@api';
-import { AutoComplete } from '@components';
-
 import './UploadFiles.css';
-import { fetchUser } from '../../Auth';
 
 /**
  *
  * @return {Component}
  */
-function UploadFiles({ title }) {
+function UploadFiles({ type }) {
   // const [selectedFiles, setSelectedFiles] = React.useState(undefined);
-  const airlineIdentifier = useAirlineIdentifier();
   const [accepted, setAccepted] = React.useState([]);
   const [rejected, setRejected] = React.useState([]);
-  const [name, setName] = React.useState(process.env.REACT_APP_DEFAULT_PILOT ?? '');
-  const [airline, setAirline] = React.useState(process.env.REACT_APP_DEFAULT_AIRLINE ?? null);
+  const [message, setMessage] = React.useState([]);
+  const [name, setName] = React.useState('');
+
   // const [fileInfos, setFileInfos] = React.useState([]);
 
-  const uploadFiles = async () => {
-    let url = '';
-    if (airline.includes('North Dakota')) {
-      url = '/imports/und';
-    } else if (airline.includes('SkyWest')) {
-      url = '/imports/skywest';
-    } else if (airline.includes('Delta')) {
-      toast.error('Sorry this import isn\'t available yet!');
+  const uploadFiles = () => {
+    if (type === 'skywest') {
+      console.log('accepted', accepted);
+      axios.post('/flight/skywest-import/');
     }
-    if (url != '') {
-      const formData = new FormData();
-      for (const a of accepted) {
-        formData.append('files', a);
-      }
-      formData.append('User_id', fetchUser().id);
-      formData.append('airline', airline);
-      formData.append('name', name);
-      await axios.post(url,
-          formData, { headers: { 'Content-Type': 'multipart/form-data' } })
-          .then((response) => {
-            for (const [d, t] of response.data) {
-              switch (t) {
-                case 'success':
-                  toast.success(d);
-                  break;
-                case 'warning':
-                  toast.warning(d);
-                  break;
-                case 'error':
-                  toast.error(d);
-                  break;
-              }
-            }
-            clear();
-          }).catch((error) => {
-            toast.error('Error uploading files');
-            throw error;
-          });
-    }
+    console.log(message);
+    setMessage([]);
   };
 
   const acceptedFiles = accepted.map((file) => {
@@ -75,7 +35,7 @@ function UploadFiles({ title }) {
   });
 
   const rejectedFiles = rejected.map(({ file, errors }) => {
-    // console.log(file, errors);
+    console.log(file, errors);
     return (
       <li key={file.path}>
         {file.path} - {file.size} bytes
@@ -92,52 +52,30 @@ function UploadFiles({ title }) {
   const clear = () => {
     setAccepted([]);
     setRejected([]);
+    setName('');
+    setMessage('');
   };
 
 
   return (
     <>
-
-      <Paper elevation={3}>
-        <center><h2>{title}</h2></center>
+      <Container className="mt-3">
         <center>
-          <Box
-            component="form"
-            sx={{
-              '& .MuiTextField-root': { m: 1, width: '25ch' },
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <AutoComplete
-              label='Airline'
-              name='AirlineIdentifier_id'
-              data={airlineIdentifier.data}
-              isLoading={airlineIdentifier.isLoading}
-              getOptionLabel={(option) => `${option.name}`}
-              onChange={(e, data) => {
-                // console.log('data', data);
-                setAirline(data ? data.name: null);
-              }}
-              defaultValue={airline}
-              // disabled
-            />
-            <TextField
-              required
-              label="Pilot"
+          <InputGroup className="mb-3 pilotName">
+            <InputGroup.Text id="basic-addon1">Pilot Name</InputGroup.Text>
+            <FormControl
+              placeholder="Pilot Name"
+              autoFocus
+              type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              // disabled
             />
-          </Box>
+          </InputGroup>
         </center>
-        <div className="p-6 mb-4 bg-light rounded-4 ">
+        <div className="p-6 mb-4 bg-light rounded-4 opacity-75 ">
           <div className="container-fluid py-2 dropzone-container">
             <Dropzone
-              onDropAccepted={(files) => {
-                // console.log(files);
-                setAccepted(accepted.concat(files));
-              }}
+              onDropAccepted={(files) => setAccepted(accepted.concat(files))}
               onDropRejected={(files) => setRejected(rejected.concat(files))}
               multiple={true} accept=".csv">
               {({ getRootProps, getInputProps }) => (
@@ -155,29 +93,41 @@ function UploadFiles({ title }) {
                   </aside>
                   <div className='text-center'>
                     <Button
-                      variant="contained"
-                      color="success"
-                      disabled={airline === null || name === '' || accepted.length === 0}
+                      variant="success"
+                      className="opacity-100"
+                      disabled={name === '' || accepted.length === 0}
                       onClick={uploadFiles}
                     >
                     Upload
                     </Button>
                     {' '}
                     <Button
-                      variant="contained"
-                      color="secondary"
-                      disabled={airline === null || name === '' || accepted.length === 0}
+                      variant="secondary"
+                      className="opacity-100"
+                      disabled={name === '' || accepted.length === 0}
                       onClick={clear}
                     >
                     Clear
                     </Button>
+                  </div>
+                  <div>
+                    {message}
                   </div>
                 </section>
               )}
             </Dropzone>
           </div>
         </div>
-      </Paper>
+        {message && message.length > 0 && (
+          <div className="alert alert-secondary" role="alert">
+            <ul>
+              {message.map((item, i) => {
+                return <li key={i}>{item}</li>;
+              })}
+            </ul>
+          </div>
+        )}
+      </Container>
     </>
   );
 }
@@ -185,5 +135,4 @@ export default UploadFiles;
 
 UploadFiles.propTypes = {
   type: PropTypes.string,
-  title: PropTypes.string,
 };

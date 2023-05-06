@@ -1,14 +1,10 @@
 import React from 'react';
-import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Logo from '@images/logo.png';
-import bg from '@images/sky.jpg';
 import { setToken, fetchToken } from '../../Auth';
 import './Login.css';
 import {
   // createTheme,
-  styled,
   Switch,
   Box,
   TextField,
@@ -17,14 +13,8 @@ import {
   CssBaseline,
   Button,
   Typography,
-  FormGroup,
-  FormControlLabel,
 } from '@mui/material';
 
-
-const LogoBox = styled(Typography)({
-  flexGrow: '4', cursor: 'pointer',
-});
 /**
  *
  * @return {Component} Login Component
@@ -37,18 +27,9 @@ const Login = () => {
   const [rememberMe, setRememberMe] = React.useState(false);
 
   React.useEffect(() => {
-    document.body.style.backgroundImage = `url('${bg}')`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundRepeat = 'no-repeat';
     if (fetchToken()) {
       navigate('/home');
     }
-    return () => {
-      document.body.style.backgroundImage = '';
-      document.body.style.backgroundSize = '';
-      document.body.style.backgroundRepeat = '';
-      document.body.style.backgroundColor = 'white';
-    };
   }, []);
 
   const handleSubmit = async (e) => {
@@ -60,17 +41,18 @@ const Login = () => {
       formData.append('username', username);
       formData.append('password', password);
       formData.append('rememberMe', rememberMe);
+      console.log(formData);
       axios.post(`/token/`, formData)
           .then((response) => {
+            console.log(response);
             if (response.data.access_token) {
               setToken(response.data.access_token, response.data.user);
               setUsername('');
               setPassword('');
               navigate('/home');
-              toast.success(`Welcome, ${response.data.user.firstName}`);
             }
           }).catch((error) => {
-            toast.error('Error logging in!');
+            console.error('error', error);
             throw error;
           });
     }
@@ -88,18 +70,12 @@ const Login = () => {
         <Box
           className='login-bg'
           sx={{
-            marginTop: 4,
+            marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
           }}>
-          <LogoBox variant="h4">
-            <img width="300px" height="175px"
-              className="d-inline-block align-top img-responsive" src={Logo} alt="logo"/>
-            {/* {' '}
-            Pilot Logbook */}
-          </LogoBox>
-          <Typography variant="h5">
+          <Typography component="h1" variant="h5">
                 Sign In
           </Typography>
           <Box component="form" style={{ opacity: '100%!important' }} onSubmit={handleSubmit} sx={{ mt: 1 }}>
@@ -125,30 +101,15 @@ const Login = () => {
               name="password"
               type="password"
               autoComplete="current-password"
-              // autoFocus
+              autoFocus
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <FormGroup>
-              <FormControlLabel
-                label={'Remember Me'}
-                control={
-                  <Switch
-                    // sx={{ width: width ? width : '100%' }}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    value={rememberMe}
-                    margin="normal"
-                    // error={Boolean(fieldState.error)}
-                    // helperText={fieldState?.error?.message}
-                    // {...props}
-                  />}
-              />
-            </FormGroup>
-            {/* <Switch
+            <Switch
               label="Remember Me"
               value={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-            /> */}
+            />
             <Button
               type="submit"
               fullWidth
