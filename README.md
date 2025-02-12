@@ -1,3 +1,4 @@
+Update 2/12/2025 - Still planning on bringing this back, just looking for the database hosting still. Moved to https://github.com/jfladhq/pilot_logbook though for more CI tools.
 Update 4/28/2024 - Server is currently down due to looking for alternative database hosting.
 
 # Pilot Logbook
